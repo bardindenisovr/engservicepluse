@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { YandexMetricaProvider } from "@artginzburg/next-ym";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://serviceinplus.ru";
+const METRICA_ID = 112550935;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -68,41 +70,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              name: "Сервис в плюс",
-              description:
-                "Аудит и развитие сервисных систем производителей промышленного и инженерного оборудования",
-              url: BASE_URL,
-              areaServed: "RU",
-              serviceType: [
-                "Аудит сервисной системы",
-                "Проектирование сервисной модели",
-                "SLA и KPI",
-                "Гарантия и рекламации",
-                "Сервисная партнерская сеть",
-                "Управление ЗИП",
-                "Экономика сервиса",
-                "Сервис инженерной инфраструктуры ЦОД",
-              ],
-              founder: {
-                "@type": "Person",
-                name: "Роман",
-                jobTitle: "Руководитель и архитектор сервисных систем",
-              },
-            }),
-          }}
-        />
-      </head>
       <body className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 pt-16">{children}</main>
-        <Footer />
+        <YandexMetricaProvider
+          initParameters={{
+            ssr: true,
+            webvisor: true,
+            clickmap: true,
+            ecommerce: "dataLayer",
+            accurateTrackBounce: true,
+            trackLinks: true,
+          }}
+        >
+          <Header />
+          <main className="flex-1 pt-16">{children}</main>
+          <Footer />
+        </YandexMetricaProvider>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Send, Loader2, CheckCircle2 } from "lucide-react";
+import { useMetrica } from "@artginzburg/next-ym";
 
 const topics = [
   "Аудит сервисной системы",
@@ -19,6 +20,8 @@ const topics = [
 ];
 
 export default function ContactForm() {
+  const { reachGoal } = useMetrica();
+
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -69,6 +72,7 @@ export default function ContactForm() {
 
       setSuccess(true);
       setSending(false);
+      reachGoal("lead_form_submit");
     } catch {
       setError("Ошибка соединения. Попробуйте еще раз.");
       setSending(false);
@@ -241,7 +245,10 @@ export default function ContactForm() {
         />
         <span className="text-xs text-gray-500 leading-relaxed">
           Я согласен на обработку персональных данных в соответствии с{" "}
-          <a href="/privacy" className="text-[var(--electric-blue)] hover:underline">
+          <a
+            href="/privacy"
+            className="text-[var(--electric-blue)] hover:underline"
+          >
             политикой обработки персональных данных
           </a>
         </span>
