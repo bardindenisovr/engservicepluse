@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import { YandexMetricaProvider } from "@artginzburg/next-ym";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://serviceinplus.ru";
-const METRICA_ID = 112550935;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
