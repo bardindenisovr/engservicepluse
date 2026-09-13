@@ -16,7 +16,52 @@ const competencies = [
 
 export default function About() {
   return (
-    <section id="about" className="relative z-10 border-t border-[var(--border-subtle)]">
+    <section
+      id="about"
+      className="relative z-10 border-t border-[var(--border-subtle)]"
+    >
+      {/* JSON-LD схема Person для идентификации эксперта в поисковиках и ИИ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Роман Николаевич Бардин-Денисов",
+            alternateName: "Роман",
+            jobTitle: "Эксперт по архитектуре инженерного сервиса",
+            description:
+              "Руководитель и архитектор сервисных систем для производителей промышленного и инженерного оборудования. Специализируется на построении сервисных подразделений, SLA, KPI, управлении гарантией, сервисными сетями, ЗИП и экономикой сервиса.",
+            url: "https://serviceinplus.ru/about",
+            image: "https://serviceinplus.ru/roman.jpg",
+            knowsAbout: [
+              "Технический сервис",
+              "Инженерный сервис",
+              "SLA",
+              "KPI",
+              "Управление гарантией",
+              "Рекламации",
+              "Сервисная сеть",
+              "Управление ЗИП",
+              "Экономика сервиса",
+              "Постгарантийное обслуживание",
+              "Инженерная инфраструктура ЦОД",
+              "Эксплуатация оборудования",
+              "ТОиР",
+            ],
+            sameAs: [
+              "https://t.me/engserviceplus",
+              "https://tenchat.ru/bardin-denisov",
+            ],
+            worksFor: {
+              "@type": "Organization",
+              name: "Сервис в плюс",
+              url: "https://serviceinplus.ru",
+            },
+          }),
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-6 py-20">
         {/* Заголовок */}
         <div className="mb-12">
@@ -36,21 +81,21 @@ export default function About() {
         <div className="grid lg:grid-cols-[auto_1fr] gap-10 items-start">
           {/* Фото и карточка */}
           <div className="space-y-5 lg:w-80">
-            {/* Фото или плейсхолдер */}
+            {/* Фото */}
             <div className="relative aspect-[4/5] rounded-2xl border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--graphite)] to-[var(--deep-blue)] overflow-hidden">
-            <img
-            src="/roman.png"
-            alt="Роман Бардин-Денисов — эксперт по архитектуре инженерного сервиса"
-            className="absolute inset-0 w-full h-full object-cover"
-            />
-            {/* Затемнение снизу для читаемости, если нужно */}
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--background)]/80 to-transparent pointer-events-none" />
-          </div>
+              <img
+                src="/roman.jpg"
+                alt="Роман Бардин-Денисов — эксперт по архитектуре инженерного сервиса"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--background)]/80 to-transparent pointer-events-none" />
+            </div>
 
             {/* Карточка эксперта */}
             <div className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/50">
-              <h3 className="text-lg font-semibold text-white mb-1">Роман Николаевич</h3>
-              <h3 className="text-lg font-semibold text-white mb-1">Бардин-Денисов</h3>
+              <h3 className="text-lg font-semibold text-white mb-1">
+                Роман Бардин-Денисов
+              </h3>
               <p className="text-sm text-[var(--electric-blue)] mb-4">
                 Руководитель и архитектор сервисных систем
               </p>
