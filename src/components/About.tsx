@@ -38,22 +38,14 @@ export default function About() {
           <div className="space-y-5 lg:w-80">
             {/* Фото или плейсхолдер */}
             <div className="relative aspect-[4/5] rounded-2xl border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--graphite)] to-[var(--deep-blue)] overflow-hidden">
-              {/* Плейсхолдер с инициалами */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-[var(--graphite-light)] border border-[var(--border-subtle)] flex items-center justify-center">
-                    <span className="text-3xl font-bold text-[var(--electric-blue)]">
-                      Р
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest">
-                    Фото будет добавлено
-                  </p>
-                </div>
-              </div>
-              {/* Декоративная сетка */}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(45,127,249,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(45,127,249,0.06)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-            </div>
+            <img
+            src="/roman.jpg"
+            alt="Роман Бардин-Денисов — эксперт по архитектуре инженерного сервиса"
+            className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Затемнение снизу для читаемости, если нужно */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--background)]/80 to-transparent pointer-events-none" />
+          </div>
 
             {/* Карточка эксперта */}
             <div className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/50">
