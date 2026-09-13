@@ -22,13 +22,11 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Логотип и название */}
         <Link href="/" className="flex items-center gap-3 group">
-         
-         
-         <div className="w-9 h-9 rounded-lg bg-[var(--graphite)] border border-[var(--border-subtle)] flex items-center justify-center relative overflow-hidden">
-           <img
-            src="/telegram-logo.png"
-            alt="Сервис в плюс"
-            className="w-full h-full object-cover"
+          <div className="w-9 h-9 rounded-lg bg-[var(--graphite)] border border-[var(--border-subtle)] flex items-center justify-center relative overflow-hidden">
+            <img
+              src="/telegram-logo.png"
+              alt="Сервис в плюс"
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="hidden sm:block leading-tight">
