@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Send, Loader2, CheckCircle2 } from "lucide-react";
-import { useMetrica } from "@artginzburg/next-ym";
 
 const topics = [
   "Аудит сервисной системы",
@@ -20,12 +19,8 @@ const topics = [
 ];
 
 export default function ContactForm() {
-  const { reachGoal } = useMetrica();
-
   const [form, setForm] = useState({
     name: "",
-    company: "",
-    position: "",
     email: "",
     phone: "",
     telegram: "",
@@ -72,7 +67,11 @@ export default function ContactForm() {
 
       setSuccess(true);
       setSending(false);
-      reachGoal("lead_form_submit");
+
+      // Отправляем цель в Яндекс.Метрику
+      if (typeof window !== "undefined" && (window as any).ym) {
+        (window as any).ym(112550935, "reachGoal", "lead_form_submit");
+      }
     } catch {
       setError("Ошибка соединения. Попробуйте еще раз.");
       setSending(false);
@@ -98,58 +97,32 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">
-            Имя <span className="text-[var(--warm-accent)]">*</span>
-          </label>
-          <input
-            type="text"
-            required
-            value={form.name}
-            onChange={(e) => update("name", e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="Как к вам обращаться"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">Компания</label>
-          <input
-            type="text"
-            value={form.company}
-            onChange={(e) => update("company", e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="Название компании"
-          />
-        </div>
+      <div>
+        <label className="block text-xs text-gray-500 mb-2">
+          Имя <span className="text-[var(--warm-accent)]">*</span>
+        </label>
+        <input
+          type="text"
+          required
+          value={form.name}
+          onChange={(e) => update("name", e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
+          placeholder="Как к вам обращаться"
+        />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">Должность</label>
-          <input
-            type="text"
-            value={form.position}
-            onChange={(e) => update("position", e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="Ваша роль"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">
-            Email <span className="text-[var(--warm-accent)]">*</span>
-          </label>
-          <input
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => update("email", e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="you@company.ru"
-          />
-        </div>
+      <div>
+        <label className="block text-xs text-gray-500 mb-2">
+          Email <span className="text-[var(--warm-accent)]">*</span>
+        </label>
+        <input
+          type="email"
+          required
+          value={form.email}
+          onChange={(e) => update("email", e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
+          placeholder="you@company.ru"
+        />
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
