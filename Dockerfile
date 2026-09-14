@@ -1,4 +1,37 @@
 # ==========================================
+# Этап 1: Builder — сборка приложения
+# ==========================================
+FROM node:24-slim AS builder
+
+WORKDIR /app
+
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем файлы зависимостей
+COPY package*.json ./
+COPY prisma ./prisma
+
+# Build-arguments для NEXT_PUBLIC переменных
+ARG NEXT_PUBLIC_YANDEX_METRICA_ID
+ENV NEXT_PUBLIC_YANDEX_METRICA_ID=$NEXT_PUBLIC_YANDEX_METRICA_ID
+
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
+# Устанавливаем зависимости
+RUN npm ci
+
+# Копируем весь исходный код
+COPY . .
+
+# Собираем Next.js приложение
+RUN npm run build
+
+# ==========================================
 # Этап 2: Runner — запуск приложения
 # ==========================================
 FROM node:24-slim AS runner
