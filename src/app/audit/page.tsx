@@ -109,6 +109,20 @@ export default function AuditPage() {
           </Link>
         </div>
       </section>
+      import LeadMagnet from "@/components/LeadMagnet";
+
+// ... в конце JSX:
+<section className="max-w-7xl mx-auto px-6 py-16 border-t border-[var(--border-subtle)]">
+  <div className="max-w-3xl mb-10">
+    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+      Полезные материалы для самостоятельной работы
+    </h2>
+    <p className="text-gray-400 leading-relaxed">
+      Выберите материал — я отправлю его на ваш email. Без спама, только по делу.
+    </p>
+  </div>
+  <LeadMagnet />
+</section>
     </div>
   );
 }
