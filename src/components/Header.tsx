@@ -6,8 +6,8 @@ import { Menu, X, MessageSquare } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Главная" },
-  { href: "/services", label: "Чем могу помочь" },
-  { href: "/methodology", label: "Методология" },
+  { href: "/services", label: "Услуги" },
+  { href: "/methodology", label: "Подход" },
   { href: "/cases", label: "Кейсы" },
   { href: "/about", label: "Об эксперте" },
   { href: "/articles", label: "Публикации" },
@@ -33,7 +33,7 @@ export default function Header() {
             <div className="text-sm font-semibold text-white group-hover:text-[var(--electric-blue)] transition-colors">
               Сервис в плюс
             </div>
-            <div className="text-[10px] text-gray-500 uppercase tracking-wider">
+            <div className="text-[10px] text-gray-400 uppercase tracking-wider">
               Архитектура инженерного сервиса
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/contacts"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white text-sm font-medium transition-all"
+            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white text-sm font-medium transition-all min-h-[44px]"
           >
             <MessageSquare className="w-4 h-4" />
             Обсудить задачу
@@ -67,7 +67,11 @@ export default function Header() {
             className="lg:hidden p-2 text-gray-400 hover:text-white"
             aria-label="Меню"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -89,7 +93,7 @@ export default function Header() {
             <Link
               href="/contacts"
               onClick={() => setMobileOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--electric-blue)] text-white text-sm font-medium"
+              className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--electric-blue)] text-white text-sm font-medium min-h-[48px]"
             >
               <MessageSquare className="w-4 h-4" />
               Обсудить задачу
