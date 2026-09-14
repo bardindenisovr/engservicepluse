@@ -31,8 +31,6 @@ RUN npm ci
 # Копируем весь исходный код
 COPY . .
 
-# Генерируем Prisma Client
-RUN npx prisma generate
 
 # Собираем Next.js приложение
 RUN npm run build
@@ -74,5 +72,7 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+EXPOSE 3000
 # Запускаем сервер Next.js
+
 CMD ["node", "server.js"]
