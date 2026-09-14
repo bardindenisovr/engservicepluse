@@ -38,7 +38,7 @@ export default function AuditPage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/contacts"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white font-medium transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white font-medium transition-all min-h-[56px]"
             >
               Обсудить аудит
               <ArrowRight className="w-4 h-4" />
@@ -78,6 +78,20 @@ export default function AuditPage() {
         </div>
       </section>
 
+      {/* Лид-магниты — полезные материалы за контакт */}
+      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-[var(--border-subtle)]">
+        <div className="max-w-3xl mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            Полезные материалы для самостоятельной работы
+          </h2>
+          <p className="text-gray-400 leading-relaxed">
+            Выберите материал — я отправлю его на ваш email. Без спама, только
+            по делу.
+          </p>
+        </div>
+        <LeadMagnet />
+      </section>
+
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="p-8 md:p-10 rounded-2xl border border-[var(--teal-accent)]/20 bg-gradient-to-br from-[var(--teal-accent)]/5 to-transparent">
@@ -103,27 +117,13 @@ export default function AuditPage() {
 
           <Link
             href="/contacts"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--teal-accent)] hover:bg-[var(--teal-accent)]/90 text-[var(--background)] font-medium transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--teal-accent)] hover:bg-[var(--teal-accent)]/90 text-[var(--background)] font-medium transition-all min-h-[56px]"
           >
             Заказать аудит
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
-      import LeadMagnet from "@/components/LeadMagnet";
-
-// ... в конце JSX:
-<section className="max-w-7xl mx-auto px-6 py-16 border-t border-[var(--border-subtle)]">
-  <div className="max-w-3xl mb-10">
-    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-      Полезные материалы для самостоятельной работы
-    </h2>
-    <p className="text-gray-400 leading-relaxed">
-      Выберите материал — я отправлю его на ваш email. Без спама, только по делу.
-    </p>
-  </div>
-  <LeadMagnet />
-</section>
     </div>
   );
 }
