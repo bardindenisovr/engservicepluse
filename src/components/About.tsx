@@ -84,7 +84,7 @@ export default function About() {
             {/* Фото */}
             <div className="relative aspect-[4/5] rounded-2xl border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--graphite)] to-[var(--deep-blue)] overflow-hidden">
               <img
-                src="/roman.jpg"
+                src="/roman.png"
                 alt="Роман Бардин-Денисов — эксперт по архитектуре инженерного сервиса"
                 className="absolute inset-0 w-full h-full object-cover"
               />
