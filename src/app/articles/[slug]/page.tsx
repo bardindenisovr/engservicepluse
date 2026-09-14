@@ -53,8 +53,46 @@ export default async function ArticlePage({ params }: Props) {
     take: 3,
   });
 
+  // Формируем JSON-LD схему Article
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.excerpt,
+    image: "https://serviceinplus.ru/og-image.jpg",
+    datePublished: article.date.toISOString(),
+    dateModified: article.updatedAt.toISOString(),
+    author: {
+      "@type": "Person",
+      "@id": "https://serviceinplus.ru/about#person",
+      name: "Роман Бардин-Денисов",
+      url: "https://serviceinplus.ru/about",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Сервис в плюс",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://serviceinplus.ru/telegram-logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://serviceinplus.ru/articles/${slug}`,
+    },
+    articleSection: article.category?.name ?? "База знаний",
+    keywords: article.tags.map((t) => t.name).join(", "),
+    inLanguage: "ru-RU",
+  };
+
   return (
     <article className="max-w-3xl mx-auto px-6 py-16">
+      {/* JSON-LD схема Article */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+
       <Link
         href="/articles"
         className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--electric-blue)] transition-colors mb-8"
