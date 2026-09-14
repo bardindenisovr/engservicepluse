@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FileSearch, CheckCircle2, ArrowRight } from "lucide-react";
 import AuditSection from "@/components/AuditSection";
+import LeadMagnet from "@/components/LeadMagnet";
 
 export const metadata = {
   title: "Аудит сервисной системы",
