@@ -6,6 +6,7 @@ import { Menu, X, MessageSquare } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Главная" },
+  { href: "/audit", label: "Аудит" },
   { href: "/services", label: "Услуги" },
   { href: "/methodology", label: "Подход" },
   { href: "/cases", label: "Кейсы" },
