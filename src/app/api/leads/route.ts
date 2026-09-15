@@ -1,6 +1,60 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+async function sendTelegramNotification(lead: {
+  name: string;
+  company?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  telegram?: string | null;
+  message?: string | null;
+  topic?: string | null;
+  source?: string | null;
+}) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId) {
+    console.warn("Telegram-уведомления не настроены");
+    return;
+  }
+
+  const lines = [
+    "🔔 *Новая заявка с сайта*",
+    "",
+    `*Имя:* ${lead.name}`,
+  ];
+
+  if (lead.company) lines.push(`*Компания:* ${lead.company}`);
+  if (lead.email) lines.push(`*Email:* ${lead.email}`);
+  if (lead.phone) lines.push(`*Телефон:* ${lead.phone}`);
+  if (lead.telegram) lines.push(`*Telegram:* ${lead.telegram}`);
+  if (lead.topic) lines.push(`*Тема:* ${lead.topic}`);
+  if (lead.source) lines.push(`*Источник:* ${lead.source}`);
+
+  if (lead.message) {
+    lines.push("");
+    lines.push(`*Сообщение:*`);
+    lines.push(lead.message);
+  }
+
+  const text = lines.join("\n");
+
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "Markdown",
+      }),
+    });
+  } catch (error) {
+    console.error("Ошибка отправки в Telegram:", error);
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -40,6 +94,8 @@ export async function POST(request: Request) {
     });
 
     console.log("Новая заявка:", lead.id, lead.name);
+
+    await sendTelegramNotification(lead);
 
     return NextResponse.json({ ok: true, id: lead.id });
   } catch (error) {
