@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileSearch, CheckCircle2, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AuditSection from "@/components/AuditSection";
 import LeadMagnet from "@/components/LeadMagnet";
 
@@ -12,7 +12,7 @@ export const metadata = {
 export default function AuditPage() {
   return (
     <div className="relative z-10">
-      {/* Первый экран страницы аудита */}
+      {/* Первый экран страницы аудита — единственный H1 */}
       <section className="max-w-7xl mx-auto px-6 pt-16 pb-12">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--graphite)]/50 backdrop-blur-sm mb-6">
@@ -47,38 +47,10 @@ export default function AuditPage() {
         </div>
       </section>
 
-      {/* Основной блок про аудит (переиспользуем компонент) */}
-      <AuditSection />
+      {/* AuditSection без своего заголовка — начинается сразу с "Что входит" */}
+      <AuditSection showHeader={false} />
 
-      {/* Дополнительный блок: что даёт аудит */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-          Что вы получите по итогам аудита
-        </h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            "Объективную картину текущего состояния сервиса",
-            "Карту узких мест и зон потери эффективности",
-            "Перечень рисков и их приоритеты",
-            "Целевую модель сервисной системы",
-            "Дорожную карту изменений с этапами",
-            "Рекомендации по KPI и зонам ответственности",
-          ].map((item) => (
-            <div
-              key={item}
-              className="flex items-start gap-3 p-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40"
-            >
-              <CheckCircle2 className="w-5 h-5 text-[var(--teal-accent)] mt-0.5 flex-shrink-0" />
-              <span className="text-sm text-gray-300 leading-relaxed">
-                {item}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Лид-магниты — полезные материалы за контакт */}
+      {/* Лид-магниты */}
       <section className="max-w-7xl mx-auto px-6 py-16 border-t border-[var(--border-subtle)]">
         <div className="max-w-3xl mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -92,12 +64,12 @@ export default function AuditPage() {
         <LeadMagnet />
       </section>
 
-      {/* CTA */}
+      {/* Финальный CTA */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="p-8 md:p-10 rounded-2xl border border-[var(--teal-accent)]/20 bg-gradient-to-br from-[var(--teal-accent)]/5 to-transparent">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 rounded-xl bg-[var(--teal-accent)]/10 flex items-center justify-center flex-shrink-0">
-              <FileSearch className="w-6 h-6 text-[var(--teal-accent)]" />
+              <ArrowRight className="w-6 h-6 text-[var(--teal-accent)]" />
             </div>
             <div>
               <h3 className="text-xl font-semibold text-white">
