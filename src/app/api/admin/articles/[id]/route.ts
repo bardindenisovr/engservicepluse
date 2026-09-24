@@ -2,44 +2,70 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 
-export async function GET() {
+// ─────────── GET: получить одну статью ───────────
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
+  const { id } = await params;
+  const articleId = parseInt(id, 10);
+  if (isNaN(articleId)) {
+    return NextResponse.json({ error: "Неверный ID" }, { status: 400 });
+  }
+
   try {
-    const articles = await prisma.article.findMany({
+    const article = await prisma.article.findUnique({
+      where: { id: articleId },
       include: { category: true, tags: true },
-      orderBy: { date: "desc" },
     });
 
+    if (!article) {
+      return NextResponse.json({ error: "Статья не найдена" }, { status: 404 });
+    }
+
     return NextResponse.json({
-      articles: articles.map((a) => ({
-        id: a.id,
-        slug: a.slug,
-        title: a.title,
-        excerpt: a.excerpt,
-        source: a.source,
-        categoryId: a.categoryId,
-        categoryName: a.category?.name ?? "",
-        tags: a.tags.map((t) => t.name),
-        published: a.published,
-        featured: a.featured,
-        date: a.date.toISOString().split("T")[0],
-        readingTime: a.readingTime,
-      })),
+      article: {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        excerpt: article.excerpt,
+        body: article.body,
+        source: article.source,
+        categoryId: article.categoryId,
+        categoryName: article.category?.name ?? "",
+        tags: article.tags.map((t) => t.name),
+        originalUrl: article.originalUrl,
+        readingTime: article.readingTime,
+        published: article.published,
+        featured: article.featured,
+        date: article.date.toISOString().split("T")[0],
+      },
     });
   } catch (error) {
-    console.error("Ошибка загрузки статей:", error);
+    console.error("Ошибка загрузки статьи:", error);
     return NextResponse.json({ error: "Ошибка загрузки" }, { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
+// ─────────── PUT: обновить статью ───────────
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const articleId = parseInt(id, 10);
+  if (isNaN(articleId)) {
+    return NextResponse.json({ error: "Неверный ID" }, { status: 400 });
   }
 
   try {
@@ -58,39 +84,71 @@ export async function POST(request: Request) {
       featured,
     } = body;
 
-    if (!slug || !title || !excerpt || !articleBody || !originalUrl) {
-      return NextResponse.json(
-        { error: "Заполните обязательные поля" },
-        { status: 400 }
-      );
-    }
-
-    const article = await prisma.article.create({
+    const updated = await prisma.article.update({
+      where: { id: articleId },
       data: {
-        slug,
-        title,
-        excerpt,
-        body: articleBody,
-        source: source ?? "site",
-        categoryId: categoryId || null,
-        originalUrl,
-        readingTime: Number(readingTime) || 5,
-        published: published !== false,
-        featured: featured === true,
-        tags: {
-          connectOrCreate: (tags ?? []).map((name: string) => ({
-            where: { slug: toSlug(name) },
-            create: { slug: toSlug(name), name },
-          })),
-        },
+        ...(slug !== undefined && { slug }),
+        ...(title !== undefined && { title }),
+        ...(excerpt !== undefined && { excerpt }),
+        ...(articleBody !== undefined && { body: articleBody }),
+        ...(source !== undefined && { source }),
+        ...(categoryId !== undefined && { categoryId: categoryId || null }),
+        ...(originalUrl !== undefined && { originalUrl }),
+        ...(readingTime !== undefined && { readingTime: Number(readingTime) || 5 }),
+        ...(published !== undefined && { published: published !== false }),
+        ...(featured !== undefined && { featured: featured === true }),
+        ...(tags !== undefined && {
+          tags: {
+            set: [],
+            connectOrCreate: (tags ?? []).map((name: string) => ({
+              where: { slug: toSlug(name) },
+              create: { slug: toSlug(name), name },
+            })),
+          },
+        }),
       },
     });
 
-    return NextResponse.json({ article });
+    return NextResponse.json({ article: updated });
   } catch (error) {
-    console.error("Ошибка создания статьи:", error);
+    console.error("Ошибка обновления статьи:", error);
     return NextResponse.json(
-      { error: "Ошибка создания. Возможно, slug уже используется." },
+      { error: "Не удалось обновить статью. Возможно, slug уже используется." },
+      { status: 500 }
+    );
+  }
+}
+
+// ─────────── DELETE: удалить статью ───────────
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const authed = await isAuthenticated();
+  if (!authed) {
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const articleId = parseInt(id, 10);
+  if (isNaN(articleId)) {
+    return NextResponse.json({ error: "Неверный ID" }, { status: 400 });
+  }
+
+  try {
+    // Отключаем связи с тегами, чтобы delete не упал на внешних ключах
+    await prisma.article.update({
+      where: { id: articleId },
+      data: { tags: { set: [] } },
+    });
+
+    await prisma.article.delete({ where: { id: articleId } });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Ошибка удаления статьи:", error);
+    return NextResponse.json(
+      { error: "Не удалось удалить статью" },
       { status: 500 }
     );
   }
