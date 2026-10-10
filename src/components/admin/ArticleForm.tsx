@@ -76,10 +76,21 @@ export default function ArticleForm({ initialData }: Props) {
     event.preventDefault();
     if (saving) return;
     setError("");
+    const originalUrl = (data.originalUrl ?? "").trim();
+    if (originalUrl) {
+      try {
+        const url = new URL(originalUrl);
+        if (url.protocol !== "http:" && url.protocol !== "https:") throw new Error("protocol");
+      } catch {
+        setError("Укажите корректную ссылку с http:// или https:// либо оставьте поле пустым.");
+        return;
+      }
+    }
     setSaving(true);
     // Keep the existing source internally until the API and database migration is ready.
     const payload = {
       ...data,
+      originalUrl,
       source: data.source ?? "site",
       tags: Array.from(new Set(tagsInput.split(",").map(tag => tag.trim()).filter(Boolean))),
     };
@@ -140,8 +151,9 @@ export default function ArticleForm({ initialData }: Props) {
             <input id="article-tags" type="text" value={tagsInput} onChange={e => setTagsInput(e.target.value)} className={`${fieldClass} text-sm`} placeholder="SLA, гарантия, ЗИП" />
           </div>
           <div>
-            <label htmlFor="article-original" className={labelClass}>Ссылка на оригинал *</label>
-            <input id="article-original" type="url" value={data.originalUrl} onChange={e => update("originalUrl", e.target.value)} required className={`${fieldClass} text-sm`} placeholder="https://example.com/publication" />
+            <label htmlFor="article-original" className={labelClass}>Ссылка на оригинал (необязательно)</label>
+            <input id="article-original" type="url" value={data.originalUrl ?? ""} onChange={e => update("originalUrl", e.target.value)} aria-describedby="article-original-help" className={`${fieldClass} text-sm`} placeholder="https://example.com/publication" />
+            <p id="article-original-help" className="mt-2 text-[11px] text-gray-600">Для статьи сайта оставьте поле пустым. Для материала из Telegram или TenChat можно указать ссылку на первоисточник.</p>
           </div>
           <div>
             <label htmlFor="article-reading-time" className={labelClass}>Время чтения (мин)</label>
