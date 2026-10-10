@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ArrowLeft, ExternalLink, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 interface Props { params: Promise<{ slug: string }> }
@@ -43,7 +43,6 @@ export default async function ArticlePage({ params }: Props) {
     articleSection: article.category?.name ?? "База знаний",
     keywords: article.tags.map((tag) => tag.name).join(", "), inLanguage: "ru-RU",
   };
-  const originalUrl = article.originalUrl && /^https?:\/\//i.test(article.originalUrl) ? article.originalUrl : null;
 
   return (
     <article className="max-w-3xl mx-auto px-6 py-16">
@@ -64,9 +63,6 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       )}
       <div className="text-gray-300 leading-relaxed space-y-4 [&_h3]:text-white [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:leading-relaxed [&_a]:text-[var(--electric-blue)]" dangerouslySetInnerHTML={{ __html: article.body }} />
-      {originalUrl && <div className="mt-12 pt-6 border-t border-[var(--border-subtle)]">
-        <a href={originalUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-[var(--electric-blue)] hover:text-[var(--teal-accent)] transition-colors">Открыть оригинал у автора<ExternalLink className="w-4 h-4" /></a>
-      </div>}
       <div className="mt-10 p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-[var(--teal-accent)]/5">
         <p className="text-sm text-gray-300 mb-3">Если похожая задача существует в вашей компании, её можно разобрать на консультации или в рамках аудита.</p>
         <Link href="/contacts" className="inline-flex items-center gap-2 text-sm text-[var(--teal-accent)] hover:text-white transition-colors font-medium">Обсудить задачу →</Link>
