@@ -64,34 +64,55 @@ async function importTelegram(request: Request) {
     const html = await res.text();
     const posts = parseTelegramHTML(html);
     if (posts.length === 0) {
-      return NextResponse.json({ ok: false, error: "Не удалось извлечь посты. Возможно, изменилась структура страницы.", htmlLength: html.length });
+      return NextResponse.json({ ok: false, error: "Не удалось извлечь посты. Возможно, изменилась сруктура страницы.", htmlLength: html.length });
     }
     let imported = 0;
+    let skipped = 0;
     for (const post of posts.slice(-10)) {
-      if (!post.link) continue;
-      const existing = await prisma.article.findFirst({ where: { originalUrl: post.link } });
-      if (existing) continue;
-      const slug = post.title.toLowerCase().replace(/[а-яё]/g, (c) => {
-        const map: Record<string, string> = {
-          а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "e", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "c", ч: "ch", ш: "sh", щ: "sch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya",
-        };
-        return map[c] ?? c;
-      }).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
-      await prisma.article.create({
-        data: {
-          slug: `${slug || "post"}-${Date.now().toString().slice(-5)}`,
-          title: post.title || "Материал из Telegram",
-          excerpt: post.text.slice(0, 200),
-          body: post.text.split("\n").map((line) => `<p>${escapeHTML(line)}</p>`).join(""),
-          source: "telegram",
-          originalUrl: post.link,
-          readingTime: Math.max(3, Math.ceil(post.text.length / 1000)),
-          published: true,
-        },
+      const identity = post.link.match(/^https:\/\/t\.me\/(engserviceplus)\/(\d+)$/i);
+      const publicationDate = new Date(post.date);
+      // Do not silently replace a missing source date with the import time.
+      if (!identity || !post.date || !Number.isFinite(publicationDate.getTime())) {
+        skipped++;
+        continue;
+      }
+      const slug = `telegram-${identity[1].toLowerCase()}-${identity[2]}`;
+      // Preserve older imports and their existing URLs.
+      const existing = await prisma.article.findFirst({
+        where: { OR: [{ originalUrl: post.link }, { slug }] },
       });
-      imported++;
+      if (existing) {
+        skipped++;
+        continue;
+      }
+      try {
+        await prisma.article.create({
+          data: {
+            slug,
+            title: post.title || "Материал из Telegram",
+            excerpt: post.text.slice(0, 200),
+            body: post.text.split("\n").map((line) => `<p>${escapeHTML(line)}</p>`).join(""),
+            source: "telegram",
+            originalUrl: post.link,
+            date: publicationDate,
+            readingTime: Math.max(3, Math.ceil(post.text.length / 1000)),
+            published: true,
+          },
+        });
+        imported++;
+      } catch (error) {
+        // A concurrent import may have inserted this same stable slug.
+        if (typeof error === "object" && error !== null && "code" in error && error.code === "P2002") {
+          const duplicate = await prisma.article.findUnique({ where: { slug } });
+          if (duplicate?.originalUrl === post.link) {
+            skipped++;
+            continue;
+          }
+        }
+        throw error;
+      }
     }
-    return NextResponse.json({ ok: true, imported, total: posts.length });
+    return NextResponse.json({ ok: true, imported, skipped, total: posts.length });
   } catch (error) {
     console.error("Ошибка импорта из Telegram:", error);
     return NextResponse.json({ error: "Не удалось импортировать материалы" }, { status: 500 });
