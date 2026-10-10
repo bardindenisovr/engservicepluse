@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PersonSchema from "@/components/PersonSchema";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://serviceinplus.ru";
 const METRICA_ID = 112550935;
@@ -84,6 +85,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="min-h-screen flex flex-col">
+        <PersonSchema />
         <Header />
         <main className="flex-1 pt-16">{children}</main>
         <Footer />
