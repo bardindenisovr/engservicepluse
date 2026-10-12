@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import AuthorIdentity, { AUTHOR_ORCID } from "@/components/AuthorIdentity";
 
 export const dynamic = "force-dynamic";
 interface Props { params: Promise<{ slug: string }> }
@@ -37,7 +38,7 @@ export default async function ArticlePage({ params }: Props) {
     headline: article.title, description: article.excerpt,
     image: "https://serviceinplus.ru/og-image.jpg",
     datePublished: article.date.toISOString(), dateModified: article.updatedAt.toISOString(),
-    author: { "@type": "Person", "@id": "https://serviceinplus.ru/about#person", name: "Роман Бардин-Денисов", url: "https://serviceinplus.ru/about" },
+    author: { "@type": "Person", "@id": "https://serviceinplus.ru/about#person", name: "Роман Бардин-Денисов", url: "https://serviceinplus.ru/about", sameAs: [AUTHOR_ORCID] },
     publisher: { "@type": "Organization", name: "Сервис в плюс", logo: { "@type": "ImageObject", url: "https://serviceinplus.ru/telegram-logo.png" } },
     mainEntityOfPage: { "@type": "WebPage", "@id": `https://serviceinplus.ru/articles/${slug}` },
     articleSection: article.category?.name ?? "База знаний",
@@ -63,6 +64,7 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       )}
       <div className="text-gray-300 leading-relaxed space-y-4 [&_h3]:text-white [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:leading-relaxed [&_a]:text-[var(--electric-blue)]" dangerouslySetInnerHTML={{ __html: article.body }} />
+      <AuthorIdentity />
       <div className="mt-10 p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-[var(--teal-accent)]/5">
         <p className="text-sm text-gray-300 mb-3">Если похожая задача существует в вашей компании, её можно разобрать на консультации или в рамках аудита.</p>
         <Link href="/contacts" className="inline-flex items-center gap-2 text-sm text-[var(--teal-accent)] hover:text-white transition-colors font-medium">Обсудить задачу →</Link>
