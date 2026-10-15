@@ -1,12 +1,31 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import AuditSection from "@/components/AuditSection";
 import LeadMagnet from "@/components/LeadMagnet";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Аудит сервисной системы",
   description:
     "Независимая оценка того, как устроен сервис сейчас, где система теряет время, деньги и качество, и какие изменения дадут наибольший эффект.",
+  alternates: {
+    canonical: "https://serviceinplus.ru/audit",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: "https://serviceinplus.ru/audit",
+    siteName: "ESP",
+    title: "Аудит сервисной системы",
+    description:
+      "Независимая оценка того, как устроен сервис сейчас, где система теряет время, деньги и качество, и какие изменения дадут наибольший эффект.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Аудит сервисной системы",
+    description:
+      "Независимая оценка того, как устроен сервис сейчас, где система теряет время, деньги и качество, и какие изменения дадут наибольший эффект.",
+  },
 };
 
 export default function AuditPage() {
