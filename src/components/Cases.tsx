@@ -1,207 +1,264 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, Briefcase } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { Search, Clock } from "lucide-react";
 
-const cases = [
-  {
-    id: "dispatch",
-    type: "Типовая ситуация",
-    industry: "Производитель промышленного оборудования",
-    title: "Перестройка диспетчеризации сервисных обращений",
-    situation:
-      "Заявки поступали по 5 каналам: телефон, email, Telegram, WhatsApp и через менеджеров. Часть терялась, приоритеты назначались вручную, руководитель выполнял роль диспетчера.",
-    problem:
-      "Среднее время реакции — не отслеживалось. Повторные обращения — 30%. Клиенты жаловались на отсутствие обратной связи.",
-    analysis:
-      "Аудит показал: нет единой точки приема, нет классификации запросов, нет правил приоритизации, нет контроля статусов.",
-    solution:
-      "Внедрена единая точка приема. Разработана классификация по критичности. Настроены маршруты эскалации. Введены SLA по времени реакции.",
-    result:
-      "Прозрачность статусов каждой заявки. Снижение повторных обращений. Руководитель освобожден от ручной диспетчеризации.",
-    insight:
-      "Диспетчеризация — не про распределение задач, а про управление потоком и приоритетами.",
-  },
-  {
-    id: "partners",
-    type: "Типовая ситуация",
-    industry: "Инженерная компания с региональной сетью",
-    title: "Формирование единых стандартов для сервисных партнеров",
-    situation:
-      "В 12 регионах работали независимые подрядчики. Каждый — по своим правилам. Клиентский опыт сильно различался.",
-    problem:
-      "Жалобы на качество в одних регионах и похвала в других. Нет объективной оценки работы партнеров. Нет программы обучения.",
-    analysis:
-      "Отсутствуют единые требования к партнерам, нет системы оценки, нет обратной связи по качеству.",
-    solution:
-      "Разработаны критерии отбора и оценки партнеров. Введены единые регламенты. Настроена система обучения. Внедрена регулярная отчетность.",
-    result:
-      "Единый уровень сервиса в регионах. Управляемая партнерская сеть. Прозрачная система мотивации.",
-    insight:
-      "Партнерская сеть работает, когда правила одинаковы для всех — и подкреплены обучением и контролем.",
-  },
-  {
-    id: "warranty",
-    type: "Типовая ситуация",
-    industry: "Поставщик оборудования для ЦОД",
-    title: "Настройка процесса управления гарантией",
-    situation:
-      "Гарантийные расходы росли без анализа. Каждый случай рассматривался отдельно. Повторяющиеся отказы не фиксировались.",
-    problem:
-      "Нет связи с производством. Одинаковые дефекты повторяются. Себестоимость гарантии не контролируется.",
-    analysis:
-      "Процесс гарантии не описан. Ответственность размыта между сервисом, продажами и производством.",
-    solution:
-      "Разработан прозрачный процесс. Введен анализ повторяющихся отказов. Настроена обратная связь с производством.",
-    result:
-      "Контроль гарантийных расходов. Снижение повторных дефектов. Четкая зона ответственности каждого подразделения.",
-    insight:
-      "Гарантия — это не только расходы, но и источник данных о качестве продукта.",
-  },
-  {
-    id: "zip",
-    type: "Типовая ситуация",
-    industry: "Сервисная служба производителя",
-    title: "Управление ЗИП с учетом критичности оборудования",
-    situation:
-      "Склад запасных частей формировался по интуиции. Одни позиции залеживались, других постоянно не хватало.",
-    problem:
-      "Простои из-за отсутствия запчастей. Замороженные средства в неликвидных позициях.",
-    analysis:
-      "Нет связи между номенклатурой ЗИП, статистикой отказов и критичностью оборудования.",
-    solution:
-      "Разработана логика планирования по критичности. Введены правила пополнения. Настроен контроль оборачиваемости.",
-    result:
-      "Доступность критичных позиций. Снижение неликвидных остатков. Обоснованные решения по закупкам.",
-    insight:
-      "ЗИП — инструмент доступности, а не просто склад. Каждая позиция должна быть обоснована риском простоя.",
-  },
-];
+interface ApiArticle {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category?: string;
+  tags: string[];
+  date: string;
+  readingTime: number;
+}
+interface Props {
+  initialArticles?: ApiArticle[];
+  standalone?: boolean;
+}
 
-export default function Cases() {
-  const [activeCase, setActiveCase] = useState<string | null>(null);
+export default function Cases({ initialArticles, standalone = false }: Props) {
+  const [articles, setArticles] = useState<ApiArticle[]>(initialArticles ?? []);
+  const [loading, setLoading] = useState(initialArticles === undefined);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [tag, setTag] = useState("");
+  const [sortBy, setSortBy] = useState<"new" | "reading">("new");
+  const [retry, setRetry] = useState(0);
+  const Heading = standalone ? "h1" : "h2";
+
+  useEffect(() => {
+    if (initialArticles !== undefined && retry === 0) return;
+    const controller = new AbortController();
+    async function load() {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch("/api/articles", { signal: controller.signal });
+        if (!response.ok) throw new Error("Ошибка загрузки кейсов");
+        const data = await response.json();
+        if (!Array.isArray(data.articles)) throw new Error("Некорректный ответ сервера");
+        setArticles(
+          data.articles.filter((item: ApiArticle) => item.category === "Кейсы")
+        );
+      } catch (e) {
+        if (!controller.signal.aborted) {
+          console.error(e);
+          setError("Не удалось загрузить кейсы. Попробуйте ещё раз.");
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }
+    void load();
+    return () => controller.abort();
+  }, [initialArticles, retry]);
+
+  function reset() {
+    setSearch("");
+    setTag("");
+  }
+  const tags = useMemo(
+    () =>
+      Array.from(new Set(articles.flatMap((a) => a.tags ?? []))).sort((a, b) =>
+        a.localeCompare(b, "ru")
+      ),
+    [articles]
+  );
+  const filtered = useMemo(() => {
+    const q = search.trim().toLocaleLowerCase("ru");
+    return articles
+      .filter(
+        (a) =>
+          (!tag || (a.tags ?? []).includes(tag)) &&
+          (!q ||
+            [a.title, a.excerpt, a.body, ...(a.tags ?? [])].some((value) =>
+              (value ?? "").toLocaleLowerCase("ru").includes(q)
+            ))
+      )
+      .sort((a, b) =>
+        sortBy === "reading"
+          ? a.readingTime - b.readingTime
+          : b.date.localeCompare(a.date)
+      );
+  }, [articles, tag, search, sortBy]);
+  const buttonClass = (active: boolean) =>
+    `px-3 py-2 rounded-lg text-xs border transition-colors ${
+      active
+        ? "border-[var(--warm-accent)]/50 bg-[var(--warm-accent)]/10 text-[var(--warm-accent)]"
+        : "border-[var(--border-subtle)] text-gray-400 hover:text-white"
+    }`;
 
   return (
-    <section id="cases" className="relative z-10 border-t border-[var(--border-subtle)] bg-[var(--graphite)]/30">
+    <section
+      id="cases"
+      className="relative z-10 border-t border-[var(--border-subtle)] bg-[var(--graphite)]/30"
+    >
       <div className="max-w-7xl mx-auto px-6 py-20">
-        {/* Заголовок */}
-        <div className="mb-12">
+        <div className="mb-10">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--graphite)]/50 backdrop-blur-sm mb-6">
             <div className="w-2 h-2 rounded-full bg-[var(--warm-accent)] animate-pulse" />
             <span className="text-xs text-[var(--warm-accent)] tracking-wide uppercase">
-              Практические задачи
+              Практика
             </span>
           </div>
-
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            Разборы{" "}
-            <span className="text-[var(--warm-accent)]">реальных ситуаций</span>
-          </h2>
-
+          <Heading className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
+            Кейсы:{" "}
+            <span className="text-[var(--warm-accent)]">
+              ситуация, решение, результат
+            </span>
+          </Heading>
           <p className="text-lg text-gray-400 max-w-2xl mt-4 leading-relaxed">
-            Обезличенные практические сценарии, которые показывают ход
-            профессионального мышления и логику принятия решений.
+            Материалы-кейсы о практике сервиса: контекст задачи, анализ,
+            принятые решения и результат. Спецрубрика «Кейсы» раздела «Публикации».
           </p>
         </div>
 
-        {/* Сетка кейсов */}
-        <div className="grid md:grid-cols-2 gap-5">
-          {cases.map((item) => {
-            const isActive = activeCase === item.id;
-            return (
-              <div
-                key={item.id}
-                onMouseEnter={() => setActiveCase(item.id)}
-                onMouseLeave={() => setActiveCase(null)}
-                className={`p-6 rounded-xl border transition-all duration-300 ${
-                  isActive
-                    ? "border-[var(--warm-accent)]/40 bg-[var(--warm-accent)]/5"
-                    : "border-[var(--border-subtle)] bg-[var(--graphite)]/40 hover:border-[var(--warm-accent)]/30"
-                }`}
-              >
-                {/* Тег и отрасль */}
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-medium bg-[var(--warm-accent)]/10 text-[var(--warm-accent)] border border-[var(--warm-accent)]/20">
-                    <Briefcase className="w-3 h-3" />
-                    {item.type}
-                  </span>
-                  <span className="text-[11px] text-gray-500">
-                    {item.industry}
-                  </span>
-                </div>
-
-                {/* Заголовок */}
-                <h3 className="text-lg font-semibold text-white leading-snug mb-3">
-                  {item.title}
-                </h3>
-
-                {/* Раскрывающееся содержимое */}
-                <div
-                  className={`space-y-3 text-sm transition-all duration-300 overflow-hidden ${
-                    isActive ? "opacity-100 max-h-[600px] mt-4" : "opacity-0 max-h-0"
-                  }`}
-                >
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-gray-600 block mb-1">
-                      Ситуация
-                    </span>
-                    <p className="text-gray-400 leading-relaxed text-xs">
-                      {item.situation}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-gray-600 block mb-1">
-                      Проблема
-                    </span>
-                    <p className="text-[var(--warm-accent)] leading-relaxed text-xs">
-                      {item.problem}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-gray-600 block mb-1">
-                      Анализ
-                    </span>
-                    <p className="text-gray-400 leading-relaxed text-xs">
-                      {item.analysis}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-gray-600 block mb-1">
-                      Решение
-                    </span>
-                    <p className="text-gray-300 leading-relaxed text-xs">
-                      {item.solution}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-gray-600 block mb-1">
-                      Результат
-                    </span>
-                    <p className="text-[var(--teal-accent)] leading-relaxed text-xs">
-                      {item.result}
-                    </p>
-                  </div>
-                  <div className="pt-3 border-t border-[var(--border-subtle)]">
-                    <p className="text-xs text-gray-500 italic leading-relaxed">
-                      {item.insight}
-                    </p>
-                  </div>
-                </div>
-
-                {!isActive && (
-                  <p className="text-xs text-gray-600 mt-3">
-                    Наведите, чтобы увидеть разбор
-                  </p>
-                )}
-              </div>
-            );
-          })}
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search
+              aria-hidden="true"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
+            />
+            <input
+              aria-label="Поиск кейсов"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Поиск по теме, названию или хэштегу"
+              className="w-full pl-11 pr-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)]/50 text-sm text-white outline-none focus:border-[var(--warm-accent)]/50"
+            />
+          </div>
+          <select
+            aria-label="Сортировка кейсов"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as "new" | "reading")}
+            className="px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)] text-sm text-gray-300"
+          >
+            <option value="new">Сначала новые</option>
+            <option value="reading">Быстрое чтение</option>
+          </select>
         </div>
 
-        {/* Примечание */}
+        {tags.length > 0 && (
+          <div className="mb-8">
+            <p className="text-xs text-gray-500 mb-3">Темы кейсов</p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                aria-pressed={!tag}
+                onClick={() => setTag("")}
+                className={buttonClass(!tag)}
+              >
+                Все кейсы
+              </button>
+              {tags.map((value) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-pressed={tag === value}
+                  onClick={() => setTag(tag === value ? "" : value)}
+                  className={buttonClass(tag === value)}
+                >
+                  #{value.replace(/^#/, "")}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(search || tag) && (
+          <button
+            type="button"
+            onClick={reset}
+            className="mb-6 text-sm text-[var(--warm-accent)]"
+          >
+            Сбросить фильтры
+          </button>
+        )}
+
+        {loading && (
+          <p role="status" className="py-12 text-center text-gray-400">
+            Загрузка кейсов…
+          </p>
+        )}
+        {!loading && error && (
+          <div
+            role="alert"
+            className="p-8 border border-[var(--border-subtle)] rounded-xl text-center"
+          >
+            <p className="text-gray-400">{error}</p>
+            <button
+              type="button"
+              onClick={() => setRetry((value) => value + 1)}
+              className="mt-4 text-[var(--warm-accent)]"
+            >
+              Повторить загрузку
+            </button>
+          </div>
+        )}
+        {!loading && !error && (
+          <>
+            <p aria-live="polite" className="mb-5 text-xs text-gray-500">
+              Найдено кейсов: {filtered.length}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((article) => (
+                <Link
+                  key={article.id}
+                  href={`/articles/${encodeURIComponent(article.slug)}`}
+                  className="flex flex-col p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40 hover:border-[var(--warm-accent)]/40 transition-colors group"
+                >
+                  <span className="inline-flex items-center gap-1 mb-4 text-xs text-gray-500">
+                    <Clock className="w-3 h-3" />
+                    {article.readingTime} мин
+                  </span>
+                  <h3 className="text-base font-semibold text-white leading-snug mb-3 group-hover:text-[var(--warm-accent)]">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-gray-400 leading-relaxed mb-4 line-clamp-3">
+                    {article.excerpt}
+                  </p>
+                  <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-4">
+                    {(article.tags ?? []).slice(0, 4).map((value) => (
+                      <span key={value}>#{value.replace(/^#/, "")}</span>
+                    ))}
+                  </div>
+                  <div className="mt-auto flex justify-between gap-3 pt-4 border-t border-[var(--border-subtle)] text-xs">
+                    <time dateTime={article.date} className="text-gray-500">
+                      {new Date(article.date).toLocaleDateString("ru-RU", {
+                        timeZone: "UTC",
+                      })}
+                    </time>
+                    <span className="text-[var(--warm-accent)]">Читать →</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            {filtered.length === 0 && (
+              <div className="p-10 border border-dashed border-[var(--border-subtle)] rounded-xl text-center">
+                <p className="text-gray-400">
+                  Кейсы не найдены. Измените запрос или выбранные фильтры.
+                </p>
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="mt-4 text-sm text-[var(--warm-accent)]"
+                >
+                  Сбросить фильтры
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
         <p className="mt-8 text-xs text-gray-600 text-center max-w-2xl mx-auto">
-          Реальные кейсы клиентов будут добавлены после получения разрешения.
-          Сейчас представлены обезличенные экспертные разборы типовых ситуаций.
+          Кейсы клиентских проектов публикуются после согласования права на
+          раскрытие. Текущие материалы — экспертные разборы типовых ситуаций из
+          практики организации сервиса.
         </p>
       </div>
     </section>
