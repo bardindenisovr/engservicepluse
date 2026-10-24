@@ -42,7 +42,7 @@ export default function Header() {
               Сервис в плюс
             </div>
             <div className="text-[10px] text-gray-400 uppercase tracking-wider">
-              Архитектура инженрного сервиса
+              Архитектура инженерного сервиса
             </div>
           </div>
         </Link>
