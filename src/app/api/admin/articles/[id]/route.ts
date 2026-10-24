@@ -51,12 +51,6 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   if (originalUrl !== undefined) {
     if (typeof originalUrl !== "string") return bad("Ссылка должна быть строкой");
     normalizedUrl = originalUrl.trim();
-    if (normalizedUrl) {
-      try {
-        const url = new URL(normalizedUrl);
-        if (!["http:", "https:"].includes(url.protocol)) return bad("Допустимы только ссылки HTTP и HTTPS");
-      } catch { return bad("Некорректная ссылка на оригинал"); }
-    }
   }
   let normalizedTags: { name: string; slug: string }[] | undefined;
   if (tags !== undefined) {
