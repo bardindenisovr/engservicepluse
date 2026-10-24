@@ -44,14 +44,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Неверная ссылка на оригинал" }, { status: 400 });
     }
     const originalUrl = (body.originalUrl ?? "").trim();
-    if (originalUrl) {
-      try {
-        const url = new URL(originalUrl);
-        if (!["http:", "https:"].includes(url.protocol)) throw new Error("protocol");
-      } catch {
-        return NextResponse.json({ error: "Укажите ссылку с протоколом http или https" }, { status: 400 });
-      }
-    }
     if (tags != null && (!Array.isArray(tags) || tags.some(tag => typeof tag !== "string"))) {
       return NextResponse.json({ error: "Неверный формат тегов" }, { status: 400 });
     }
