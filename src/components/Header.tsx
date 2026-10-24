@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, MessageSquare } from "lucide-react";
+import { ChevronDown, Menu, X, MessageSquare } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Главная" },
-  { href: "/audit", label: "Аудит" },
-  { href: "/services", label: "Услуги" },
-  { href: "/methodology", label: "Подход" },
-  { href: "/cases", label: "Кейсы" },
+  {
+    href: "/services",
+    label: "Услуги",
+    children: [
+      { href: "/audit", label: "Аудит сервисной системы" },
+      { href: "/services", label: "Экспресс-диагностика" },
+    ],
+  },
+  { href: "/methodology", label: "Для кого" },
+  { href: "/cases", label: "Практика" },
   { href: "/about", label: "Об эксперте" },
   { href: "/articles", label: "Публикации" },
   { href: "/contacts", label: "Контакты" },
@@ -17,6 +22,8 @@ const navItems = [
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border-subtle)] bg-[var(--background)]/80 backdrop-blur-md">
@@ -35,22 +42,58 @@ export default function Header() {
               Сервис в плюс
             </div>
             <div className="text-[10px] text-gray-400 uppercase tracking-wider">
-              Архитектура инженерного сервиса
+              Архитектура инженрного сервиса
             </div>
           </div>
         </Link>
 
-        {/* Навигация — десктоп */}
+        {/* Навигация — десктоп (раздел 1 стратегии) */}
         <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) =>
+            item.children ? (
+              <div key={item.label} className="relative">
+                <button
+                  onClick={() => setServicesOpen(!servicesOpen)}
+                  onBlur={() => setTimeout(() => setServicesOpen(false), 150)}
+                  className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors inline-flex items-center gap-1"
+                >
+                  {item.label}
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                {servicesOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)] shadow-xl py-2">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.label}
+                        href={child.href}
+                        onClick={() => setServicesOpen(false)}
+                        className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                    <div className="border-t border-[var(--border-subtle)] mt-2 pt-2">
+                      <Link
+                        href="/services"
+                        onClick={() => setServicesOpen(false)}
+                        className="block px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
+                      >
+                        Все услуги
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors"
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
 
         {/* CTA + мобильная кнопка */}
@@ -81,16 +124,81 @@ export default function Header() {
       {mobileOpen && (
         <div className="lg:hidden border-t border-[var(--border-subtle)] bg-[var(--graphite)]">
           <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            {/* Услуги с раскрытием */}
+            <div>
+              <button
+                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                className="w-full text-left px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors flex items-center justify-between"
               >
-                {item.label}
-              </Link>
-            ))}
+                Услуги
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform ${
+                    mobileServicesOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              {mobileServicesOpen && (
+                <div className="pl-4 mt-1 flex flex-col gap-1">
+                  <Link
+                    href="/audit"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                  >
+                    Аудит сервисной системы
+                  </Link>
+                  <Link
+                    href="/services"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                  >
+                    Экспресс-диагностика
+                  </Link>
+                  <Link
+                    href="/services"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                  >
+                    Все услуги
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/methodology"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            >
+              Для кого
+            </Link>
+            <Link
+              href="/cases"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            >
+              Практика
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            >
+              Об эксперте
+            </Link>
+            <Link
+              href="/articles"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            >
+              Публикации
+            </Link>
+            <Link
+              href="/contacts"
+              onClick={() => setMobileOpen(false)}
+              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+            >
+              Контакты
+            </Link>
             <Link
               href="/contacts"
               onClick={() => setMobileOpen(false)}
