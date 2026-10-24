@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Send, ExternalLink, Mail } from "lucide-react";
 
 const navItems = [
-  { href: "/services", label: "Чем могу помочь" },
-  { href: "/audit", label: "Аудит сервиса" },
-  { href: "/methodology", label: "Методология" },
-  { href: "/cases", label: "Кейсы" },
+  { href: "/services", label: "Услуги" },
+  { href: "/audit", label: "Аудит сервисной системы" },
+  { href: "/methodology", label: "Для кого" },
+  { href: "/cases", label: "Практика" },
   { href: "/about", label: "Об эксперте" },
   { href: "/articles", label: "Публикации" },
   { href: "/contacts", label: "Контакты" },
@@ -22,17 +22,13 @@ export default function Footer() {
           {/* Бренд */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              
               <div className="w-9 h-9 rounded-lg bg-[var(--graphite)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
-              <img
-              src="/telegram-logo.png"
-              alt="Сервис в плюс"
-              className="w-full h-full object-cover"
-              />
+                <img
+                  src="/telegram-logo.png"
+                  alt="Сервис в плюс"
+                  className="w-full h-full object-cover"
+                />
               </div>
-
-
-
               <div>
                 <div className="text-sm font-semibold text-white">Сервис в плюс</div>
                 <div className="text-[10px] text-gray-500 uppercase tracking-wider">
@@ -41,8 +37,9 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-gray-400 max-w-md leading-relaxed">
-              Помогаю производителям промышленного и инженерного оборудования
-              превращать сервис в управляемую систему надежности и прибыли.
+              Помогаю производителям, поставщикам оборудования и предприятиям
+              выстраивать управляемый инженерный сервис: диагностика,
+              проектирование процессов, сопровождение внедрения.
             </p>
           </div>
 
