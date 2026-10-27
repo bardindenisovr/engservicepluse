@@ -77,6 +77,9 @@ export default function Header() {
           <Link href="/articles" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
             Публикации
           </Link>
+          <Link href="/tools" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Инструменты
+          </Link>
           <Link href="/contacts" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
             Контакты
           </Link>
@@ -152,6 +155,9 @@ export default function Header() {
             </Link>
             <Link href="/articles" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Публикации
+            </Link>
+            <Link href="/tools" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
+              Инструменты
             </Link>
             <Link href="/contacts" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Контакты

@@ -19,6 +19,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/articles`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/contacts`, changeFrequency: "yearly", priority: 0.7 },
+    // Раздел «Инструменты» (кластер «Бережливое производство»)
+    { url: `${BASE_URL}/tools`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/tools/5why`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/tools/ishikawa`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/tools/8d`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/tools/a3`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/lean`, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   // Страницы услуг из единого источника данных; /ekspress-diagnostika уже есть в staticPages.

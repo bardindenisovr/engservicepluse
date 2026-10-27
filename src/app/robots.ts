@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        // Личные анализы пользователей, черновики и кабинет не индексируются (п. 6.2 документа).
+        disallow: ["/admin", "/api/", "/cabinet", "/drafts", "/my"],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
