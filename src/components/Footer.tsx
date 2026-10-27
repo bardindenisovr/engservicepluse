@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Send, ExternalLink, Mail } from "lucide-react";
+import ExpertContacts from "@/components/ExpertContacts";
 
 const navItems = [
   { href: "/services", label: "Услуги" },
@@ -67,7 +68,8 @@ export default function Footer() {
             <h3 className="text-xs uppercase tracking-widest text-gray-500 mb-4">
               Связь
             </h3>
-            <ul className="space-y-3">
+            <ExpertContacts />
+            <ul className="space-y-3 mt-5">
               <li>
                 <a
                   href="https://t.me/engserviceplus"

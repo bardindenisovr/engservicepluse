@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { MessageSquare, Send, ExternalLink, Mail, Briefcase } from "lucide-react";
+import { Send, ExternalLink, Briefcase } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
+import ExpertContacts from "@/components/ExpertContacts";
 
 export const metadata = {
   title: "Контакты | Сервис в плюс",
@@ -44,6 +44,10 @@ export default function ContactsPage() {
             <h2 className="text-base font-semibold text-white mb-4">
               Прямые контакты
             </h2>
+            <ExpertContacts />
+            <h3 className="text-sm font-semibold text-white mt-6 mb-3">
+              Каналы и публикации
+            </h3>
             <div className="space-y-3">
               <a
                 href="https://t.me/engserviceplus"
