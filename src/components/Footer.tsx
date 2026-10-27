@@ -3,8 +3,11 @@ import { Send, ExternalLink, Mail } from "lucide-react";
 import ExpertContacts from "@/components/ExpertContacts";
 
 const navItems = [
-  { href: "/services", label: "Услуги" },
-  { href: "/audit", label: "Аудит сервисной системы" },
+  { href: "/services", label: "Все услуги" },
+  { href: "/audit", label: "Аудит" },
+  { href: "/ekspress-diagnostika", label: "Экспресс-диагностика" },
+  { href: "/services", label: "Проектирование" },
+  { href: "/services", label: "Сопровождение" },
   { href: "/methodology", label: "Для кого" },
   { href: "/cases", label: "Практика" },
   { href: "/about", label: "Об эксперте" },
@@ -20,7 +23,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Основная сетка футера */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Бренд */}
+          {/* Бренд — стратегия, раздел 20 */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-lg bg-[var(--graphite)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
@@ -33,25 +36,26 @@ export default function Footer() {
               <div>
                 <div className="text-sm font-semibold text-white">Сервис в плюс</div>
                 <div className="text-[10px] text-gray-500 uppercase tracking-wider">
-                  Архитектура инженерного сервиса
+                  Архитектура инженерного сервиса | ТОиР
                 </div>
               </div>
             </div>
             <p className="text-sm text-gray-400 max-w-md leading-relaxed">
-              Помогаю производителям, поставщикам оборудования и предприятиям
-              выстраивать управляемый инженерный сервис: диагностика,
-              проектирование процессов, сопровождение внедрения.
+              Архитектура и внедрение управляемого инженерного сервиса.
+              Роман Бардин-Денисов. Диагностика, проектирование процессов,
+              сопровождение внедрения для производителей, поставщиков
+              оборудования и предприятий.
             </p>
           </div>
 
-          {/* Навигация */}
+          {/* Навигация — стратегия, раздел 20 */}
           <div>
             <h3 className="text-xs uppercase tracking-widest text-gray-500 mb-4">
               Разделы
             </h3>
             <ul className="space-y-2">
               {navItems.map((item) => (
-                <li key={item.href}>
+                <li key={item.label}>
                   <Link
                     href={item.href}
                     className="text-sm text-gray-400 hover:text-[var(--electric-blue)] transition-colors"
