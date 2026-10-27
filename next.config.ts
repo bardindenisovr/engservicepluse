@@ -22,7 +22,8 @@ const nextConfig: NextConfig = {
       { source: "/kontakty", destination: "/contacts", permanent: true },
       { source: "/praktika", destination: "/cases", permanent: true },
       { source: "/publikacii", destination: "/articles", permanent: true },
-      { source: "/about", destination: "/roman-bardin-denisov", permanent: true },
+      // Канонический адрес страницы эксперта — /about; старый путь ведёт на него
+      { source: "/roman-bardin-denisov", destination: "/about", permanent: true },
       // Legacy duplicates
       { source: "/services/audit", destination: "/audit", permanent: true },
       { source: "/services/ekspress-diagnostika", destination: "/ekspress-diagnostika", permanent: true },
