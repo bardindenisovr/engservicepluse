@@ -1,10 +1,11 @@
-import { Send, ExternalLink, Briefcase } from "lucide-react";
+import { Send, ExternalLink, ClipboardCheck } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import ExpertContacts from "@/components/ExpertContacts";
 
 export const metadata = {
   title: "Контакты | Сервис в плюс",
-  description: "Обсудим вашу сервисную задачу — аудит, консультация, проектирование сервисной модели.",
+  description:
+    "Обсудим вашу сервисную задачу — аудит, консультация, проектирование сервисной модели.",
 };
 
 export default function ContactsPage() {
@@ -15,19 +16,19 @@ export default function ContactsPage() {
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--graphite)]/50 backdrop-blur-sm mb-6">
           <div className="w-2 h-2 rounded-full bg-[var(--teal-accent)] animate-pulse" />
           <span className="text-xs text-[var(--teal-accent)] tracking-wide uppercase">
-            Обсудим задачу
+            Контакты
           </span>
         </div>
 
         <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4">
-          Опишите вашу{" "}
-          <span className="text-[var(--electric-blue)]">сервисную ситуацию</span>
+          Обсудим{" "}
+          <span className="text-[var(--electric-blue)]">вашу задачу</span>
         </h1>
 
         <p className="text-lg text-gray-400 leading-relaxed">
-          Тип оборудования, география, количество обращений, гарантийная нагрузка,
-          сервисная команда, подрядчики или цель изменений. Я предложу формат
-          первичного обсуждения.
+          Расскажите, что происходит в сервисе или ТОиР, на что это влияет и
+          что вы хотите изменить. Не нужно заранее выбирать услугу или готовить
+          большое описание — достаточно обозначить ситуацию.
         </p>
       </div>
 
@@ -37,8 +38,66 @@ export default function ContactsPage() {
           <ContactForm />
         </div>
 
-        {/* Контакты и сценарии */}
+        {/* Встреча и контакты */}
         <div className="space-y-6">
+          {/* Что даст первая встреча */}
+          <div className="p-6 rounded-2xl border border-[var(--teal-accent)]/20 bg-gradient-to-br from-[var(--teal-accent)]/5 to-transparent">
+            <div className="flex items-center gap-3 mb-4">
+              <ClipboardCheck className="w-5 h-5 text-[var(--teal-accent)]" />
+              <h2 className="text-base font-semibold text-white">
+                Что даст первая встреча
+              </h2>
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed mb-4">
+              Первичное обсуждение — 30 минут, без оплаты и обязательств. Оно не
+              заменяет анализ документов и техническую диагностику, но позволяет
+              понять масштаб задачи и подходящий формат работы.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-400 mb-5">
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Первичный разбор ситуации и типа проблемы</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Оценка масштаба и зоны решения</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Рекомендация по формату работ</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Понимание следующего шага без покупки аудита</span>
+              </li>
+            </ul>
+            <h3 className="text-sm font-semibold text-white mb-3">
+              Что подготовить
+            </h3>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Ваша роль и место в процессе</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Тип оборудования или процесса</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Как проявляется проблема</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>На что она влияет</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--teal-accent)] mt-2 flex-shrink-0" />
+                <span>Срок, до которого нужно изменение</span>
+              </li>
+            </ul>
+          </div>
+
           {/* Прямые контакты */}
           <div className="p-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40">
             <h2 className="text-base font-semibold text-white mb-4">
@@ -71,62 +130,18 @@ export default function ContactsPage() {
                 <ExternalLink className="w-4 h-4 text-[var(--electric-blue)]" />
                 <div>
                   <div className="text-sm text-white">TenChat</div>
-                  <div className="text-xs text-gray-500">Публикации и профиль</div>
+                  <div className="text-xs text-gray-500">
+                    Публикации и профиль
+                  </div>
                 </div>
               </a>
             </div>
           </div>
 
-          {/* Сценарии обращения */}
-          <div className="p-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40">
-            <h2 className="text-base font-semibold text-white mb-4">
-              С чем можно обратиться
-            </h2>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                <span>Аудит сервисной системы или подразделения</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                <span>Проектирование целевой сервисной модели</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                <span>SLA, KPI, гарантия и рекламации</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                <span>Сервисная сеть и партнеры</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                <span>ЗИП, экономика сервиса, ЦОД</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Для работодателей */}
-          <div className="p-6 rounded-2xl border border-[var(--electric-blue)]/20 bg-gradient-to-br from-[var(--electric-blue)]/5 to-transparent">
-            <div className="flex items-start gap-3">
-              <Briefcase className="w-5 h-5 text-[var(--electric-blue)] flex-shrink-0 mt-0.5" />
-              <div>
-                <h2 className="text-base font-semibold text-white mb-2">
-                  Предложение руководящей позиции
-                </h2>
-                <p className="text-sm text-gray-400 leading-relaxed">
-                  Рассматриваю позиции и проекты, связанные с развитием
-                  технического сервиса, эксплуатации и сервисных продуктов.
-                  Опишите роль и контекст — отвечу.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Примечание */}
           <p className="text-xs text-gray-600 leading-relaxed">
-            Первый разговор — без обязательств. Определим контекст, масштаб
-            задачи и возможный формат работы.
+            Первое обсуждение — без оплаты и обязательств. Оно позволяет понять
+            масштаб задачи и подходящий формат работы.
           </p>
         </div>
       </div>

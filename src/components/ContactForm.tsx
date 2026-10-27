@@ -14,7 +14,6 @@ const topics = [
   "Управление ЗИП",
   "Экономика сервиса",
   "Сервис ЦОД",
-  "Предложение постоянной работы",
   "Другое",
 ];
 
@@ -41,6 +40,15 @@ export default function ContactForm() {
     e.preventDefault();
     setError("");
 
+    const contactValue = [form.email, form.phone, form.telegram]
+      .map((v) => v.trim())
+      .filter(Boolean)[0];
+
+    if (!contactValue) {
+      setError("Укажите хотя бы один способ связи: email, телефон или Telegram");
+      return;
+    }
+
     if (!consent) {
       setError("Необходимо согласие на обработку персональных данных");
       return;
@@ -54,6 +62,7 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          contact: contactValue,
           source: "contact-form",
         }),
       });
@@ -88,8 +97,8 @@ export default function ContactForm() {
           Заявка отправлена
         </h2>
         <p className="text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-          Спасибо. Я свяжусь с вами в ближайшее время, чтобы обсудить задачу и
-          предложить формат первичного разговора.
+          Спасибо. Мы свяжемся с вами в ближайшее время, чтобы обсудить задачу
+          и предложить формат первичного разговора.
         </p>
       </div>
     );
@@ -113,16 +122,32 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-gray-500 mb-2">
-          Email <span className="text-[var(--warm-accent)]">*</span>
+          Описание задачи <span className="text-[var(--warm-accent)]">*</span>
+        </label>
+        <textarea
+          required
+          rows={5}
+          value={form.message}
+          onChange={(e) => update("message", e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none resize-vertical text-sm"
+          placeholder="Что происходит, на что это влияет, что вы хотите изменить"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs text-gray-500 mb-2">
+          Контакт для связи <span className="text-[var(--warm-accent)]">*</span>
         </label>
         <input
-          type="email"
-          required
+          type="text"
           value={form.email}
           onChange={(e) => update("email", e.target.value)}
           className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-          placeholder="you@company.ru"
+          placeholder="Email, телефон +7 ... или @telegram"
         />
+        <p className="mt-1.5 text-[11px] text-gray-600 leading-relaxed">
+          Любой удобный способ связи — достаточно одного
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -158,27 +183,13 @@ export default function ContactForm() {
           onChange={(e) => update("topic", e.target.value)}
           className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
         >
-          <option value="">Выберите тему</option>
+          <option value="">Можно не выбирать — обсудим на встрече</option>
           {topics.map((t) => (
             <option key={t} value={t}>
               {t}
             </option>
           ))}
         </select>
-      </div>
-
-      <div>
-        <label className="block text-xs text-gray-500 mb-2">
-          Описание задачи <span className="text-[var(--warm-accent)]">*</span>
-        </label>
-        <textarea
-          required
-          rows={5}
-          value={form.message}
-          onChange={(e) => update("message", e.target.value)}
-          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none resize-vertical text-sm"
-          placeholder="Тип оборудования, география, количество обращений, гарантийная нагрузка, текущая ситуация или цель изменений"
-        />
       </div>
 
       <div>
@@ -242,14 +253,14 @@ export default function ContactForm() {
         ) : (
           <>
             <Send className="w-4 h-4" />
-            Отправить запрос
+            Обсудить задачу
           </>
         )}
       </button>
 
       <p className="text-[11px] text-gray-600 text-center leading-relaxed">
-        Первый разговор — без обязательств. Определим контекст, масштаб задачи и
-        возможный формат работы.
+        Обязательных полей всего два: имя и способ связи. Остальное поможет
+        подготовиться к разговору.
       </p>
     </form>
   );
