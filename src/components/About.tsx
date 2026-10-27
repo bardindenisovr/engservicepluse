@@ -1,17 +1,15 @@
 import Link from "next/link";
-import { Send, ExternalLink, MessageSquare, Download } from "lucide-react";
+import { Send, ExternalLink, MessageSquare, Download, ArrowRight } from "lucide-react";
 
-const competencies = [
-  "Создание сервисных подразделений с нуля",
-  "Управление инженерными и сервисными командами",
-  "Построение процессов технического сервиса",
-  "Развитие регионального обслуживания",
-  "Взаимодействие с производством, продажами и клиентами",
-  "Управление гарантией и рекламациями",
-  "Внедрение показателей и управленческой отчетности",
-  "Организация работы с сервисными партнерами",
-  "Управление эксплуатацией сложного оборудования",
-  "Развитие сервисных продуктов и постгарантийного обслуживания",
+const helpAreas = [
+  "Аудит сервисных систем и ТОиР",
+  "Организация и перестройка сервисных служб",
+  "SLA и KPI",
+  "Гарантия и рекламации",
+  "Управление ЗИП",
+  "Партнёрские сервисные сети",
+  "Экономика обслуживания",
+  "Пилоты и поддержка руководителей при внедрении",
 ];
 
 export default function About() {
@@ -20,7 +18,7 @@ export default function About() {
       id="about"
       className="relative z-10 border-t border-[var(--border-subtle)]"
     >
-      {/* JSON-LD схема Person для идентификации эксперта в поисковиках и ИИ */}
+      {/* JSON-LD схема Person */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -29,9 +27,9 @@ export default function About() {
             "@type": "Person",
             name: "Роман Николаевич Бардин-Денисов",
             alternateName: "Роман",
-            jobTitle: "Эксперт по архитектуре инженерного сервиса",
+            jobTitle: "Эксперт-практик по архитектуре инженерного сервиса",
             description:
-              "Руководитель и архитектор сервисных систем для производителей промышленного и инженерного оборудования. Специализируется на построении сервисных подразделений, SLA, KPI, управлении гарантией, сервисными сетями, ЗИП и экономикой сервиса.",
+              "Помогает производителям, поставщикам оборудования и предприятиям организовать сервис и ТОиР: аудит, проектирование процессов, SLA и KPI, гарантия, ЗИП, сервисные сети, сопровождение внедрения.",
             url: "https://serviceinplus.ru/about",
             image: "https://serviceinplus.ru/roman.jpg",
             knowsAbout: [
@@ -45,7 +43,6 @@ export default function About() {
               "Управление ЗИП",
               "Экономика сервиса",
               "Постгарантийное обслуживание",
-              "Инженерная инфраструктура ЦОД",
               "Эксплуатация оборудования",
               "ТОиР",
             ],
@@ -63,8 +60,8 @@ export default function About() {
       />
 
       <div className="max-w-7xl mx-auto px-6 py-20">
-        {/* Заголовок */}
-        <div className="mb-12">
+        {/* Заголовок и лид */}
+        <div className="mb-12 max-w-3xl">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--graphite)]/50 backdrop-blur-sm mb-6">
             <div className="w-2 h-2 rounded-full bg-[var(--electric-blue)] animate-pulse" />
             <span className="text-xs text-[var(--electric-blue)] tracking-wide uppercase">
@@ -72,32 +69,37 @@ export default function About() {
             </span>
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            Кто отвечает{" "}
-            <span className="text-[var(--electric-blue)]">за результат</span>
-          </h2>
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+            Роман Бардин-Денисов — эксперт-практик{" "}
+            <span className="text-[var(--electric-blue)]">по архитектуре инженерного сервиса</span>
+          </h1>
+
+          <p className="mt-6 text-base md:text-lg text-gray-400 leading-relaxed">
+            Помогаю производителям, поставщикам оборудования и предприятиям организовать
+            сервис и ТОиР: выявить причины повторных обращений и простоев, выстроить
+            ответственность, планирование, работу с ЗИП и показатели. Провожу аудит,
+            проектирую процессы и сопровождаю внедрение улучшений.
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-[auto_1fr] gap-10 items-start">
           {/* Фото и карточка */}
           <div className="space-y-5 lg:w-80">
-            {/* Фото */}
             <div className="relative aspect-[4/5] rounded-2xl border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--graphite)] to-[var(--deep-blue)] overflow-hidden">
               <img
                 src="/roman.png"
-                alt="Роман Бардин-Денисов — эксперт по архитектуре инженерного сервиса"
+                alt="Роман Бардин-Денисов — эксперт-практик по архитектуре инженерного сервиса"
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--background)]/80 to-transparent pointer-events-none" />
             </div>
 
-            {/* Карточка эксперта */}
             <div className="p-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/50">
-              <h3 className="text-lg font-semibold text-white mb-1">
+              <h2 className="text-lg font-semibold text-white mb-1">
                 Роман Бардин-Денисов
-              </h3>
+              </h2>
               <p className="text-sm text-[var(--electric-blue)] mb-4">
-                Руководитель и архитектор сервисных систем
+                Эксперт-практик по архитектуре инженерного сервиса
               </p>
 
               <div className="space-y-2 pt-4 border-t border-[var(--border-subtle)]">
@@ -134,45 +136,79 @@ export default function About() {
             </div>
           </div>
 
-          {/* Текст */}
-          <div className="space-y-6">
-            {/* Основная цитата */}
-            <div className="p-6 rounded-xl border-l-2 border-[var(--electric-blue)] bg-[var(--graphite)]/40">
-              <p className="text-lg text-gray-300 italic leading-relaxed">
-                «Я рассматриваю сервис не как набор разрозненных функций, а как
-                единую управленческую систему. Её задача — обеспечивать
-                надежность оборудования, выполнять обязательства перед клиентом
-                и создавать измеримый результат для бизнеса».
-              </p>
+          {/* Текстовые блоки по разделу 17 */}
+          <div className="space-y-10">
+            {/* Мой подход */}
+            <div>
+              <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">Мой подход</h2>
+              <div className="space-y-4 text-sm md:text-base text-gray-400 leading-relaxed">
+                <p>
+                  Сервис становится управляемым, когда обязательства связаны с ресурсами,
+                  у процесса есть владелец, а данные помогают принимать решения. Поэтому
+                  начинаю с фактов и реального пути работы, а не с набора готовых
+                  регламентов. Отделяю подтверждённые выводы от гипотез и фиксирую
+                  ограничения.
+                </p>
+                <p>
+                  Lean использую для улучшения потока и взаимодействия, RCA — для проверки
+                  причин, TPM — в задачах обслуживания оборудования, где этот подход уместен.
+                  Метод выбирается под проблему. Цель — применимый процесс и измеряемая
+                  проверка, а не внедрение инструмента ради инструмента.
+                </p>
+              </div>
             </div>
 
-            {/* Что решаю */}
+            {/* С чем помогаю */}
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Задачи, которые я умею решать
-              </h3>
+              <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">С чем помогаю</h2>
               <div className="grid md:grid-cols-2 gap-3">
-                {competencies.map((comp) => (
+                {helpAreas.map((area) => (
                   <div
-                    key={comp}
+                    key={area}
                     className="flex items-start gap-3 p-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)]/30"
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-[var(--electric-blue)] mt-2 flex-shrink-0" />
-                    <span className="text-sm text-gray-400 leading-relaxed">
-                      {comp}
-                    </span>
+                    <span className="text-sm text-gray-400 leading-relaxed">{area}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Позиционирование */}
+            {/* Границы экспертизы */}
             <div className="p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-gradient-to-br from-[var(--teal-accent)]/5 to-transparent">
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Практический опыт управления сервисными системами: до 50
-                сотрудников в прямом и функциональном контуре, а также до 30
-                внешних подрядчиков и сервисных партнеров.
+              <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">Границы экспертизы</h2>
+              <p className="text-sm md:text-base text-gray-400 leading-relaxed">
+                Основной предмет работы — организация инженерного сервиса и взаимодействия
+                участников. Промышленное оборудование и инженерная инфраструктура — область
+                применения, а не заявление об одинаковой технической квалификации во всех
+                системах. Для специальных технических проверок и решений привлекаются
+                профильные специалисты по согласованию с заказчиком.
               </p>
+            </div>
+
+            {/* Как начать — CTA */}
+            <div className="p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40">
+              <h2 className="text-xl md:text-2xl font-semibold text-white mb-3">Как начать</h2>
+              <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-5">
+                На вводной встрече за 30 минут уточним проблему, доступные данные и возможный
+                первый шаг. Если задача вне моего профиля или проект пока не готов к запуску —
+                обозначу это до начала работ.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/contacts"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--electric-blue)] text-[var(--background)] text-sm font-medium hover:opacity-90 transition-opacity"
+                >
+                  Обсудить задачу
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/cases"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[var(--border-subtle)] text-sm text-gray-300 hover:text-white hover:border-[var(--electric-blue)]/50 transition-colors"
+                >
+                  Посмотреть практику
+                </Link>
+              </div>
             </div>
           </div>
         </div>
