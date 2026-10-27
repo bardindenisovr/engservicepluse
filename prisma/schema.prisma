@@ -50,19 +50,29 @@ model Tag {
 }
 
 model Lead {
-  id          Int      @id @default(autoincrement())
-  name        String
-  company     String?
-  position    String?
-  email       String?
-  phone       String?
-  telegram    String?
-  message     String?
-  topic       String?
-  source      String?
-  status      String   @default("new")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  name              String
+  company           String?
+  position          String?
+  email             String?
+  phone             String?
+  telegram          String?
+  message           String?
+  topic             String?
+  source            String?
+  helpFormat        String?
+  sourcePage        String?
+  sourceTool        String?
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  consentVersion    String?
+  newsletterConsent Boolean  @default(false)
+  analysisAttached  Boolean  @default(false)
+  analysisLink      String?
+  status            String   @default("new")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@index([status])
   @@index([createdAt])
