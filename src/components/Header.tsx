@@ -4,26 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Menu, X, MessageSquare } from "lucide-react";
 
-const navItems = [
-  {
-    href: "/services",
-    label: "Услуги",
-    children: [
-      { href: "/audit", label: "Аудит сервисной системы" },
-      { href: "/ekspress-diagnostika", label: "Экспресс-диагностика" },
-    ],
-  },
-  { href: "/methodology", label: "Для кого" },
-  { href: "/cases", label: "Практика" },
-  { href: "/about", label: "Об эксперте" },
-  { href: "/articles", label: "Публикации" },
-  { href: "/contacts", label: "Контакты" },
-];
-
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border-subtle)] bg-[var(--background)]/80 backdrop-blur-md">
@@ -47,53 +29,57 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Навигация — десктоп (раздел 1 стратегии) */}
+        {/* Навигация — десктоп (все ссылки в HTML для SEO) */}
         <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) =>
-            item.children ? (
-              <div key={item.label} className="relative">
-                <button
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                  onBlur={() => setTimeout(() => setServicesOpen(false), 150)}
-                  className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors inline-flex items-center gap-1"
-                >
-                  {item.label}
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-                {servicesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)] shadow-xl py-2">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={() => setServicesOpen(false)}
-                        className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                    <div className="border-t border-[var(--border-subtle)] mt-2 pt-2">
-                      <Link
-                        href="/services"
-                        onClick={() => setServicesOpen(false)}
-                        className="block px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
-                      >
-                        Все услуги
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
+          {/* Услуги — CSS-only раскрытие */}
+          <div className="relative group">
+            <button
+              className="px-3 py-2 text-sm text-gray-400 group-hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors inline-flex items-center gap-1"
+              aria-expanded="false"
+            >
+              Услуги
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+            <div className="absolute top-full left-0 mt-1 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)] shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
               <Link
-                key={item.href}
-                href={item.href}
-                className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors"
+                href="/audit"
+                className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
               >
-                {item.label}
+                Аудит сервисной системы
               </Link>
-            )
-          )}
+              <Link
+                href="/ekspress-diagnostika"
+                className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
+              >
+                Экспресс-диагностика
+              </Link>
+              <div className="border-t border-[var(--border-subtle)] mt-2 pt-2">
+                <Link
+                  href="/services"
+                  className="block px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
+                >
+                  Все услуги
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Остальные разделы — открыто */}
+          <Link href="/methodology" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Для кого
+          </Link>
+          <Link href="/cases" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Практика
+          </Link>
+          <Link href="/about" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Об эксперте
+          </Link>
+          <Link href="/articles" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Публикации
+          </Link>
+          <Link href="/contacts" className="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite)]/50 rounded-md transition-colors">
+            Контакты
+          </Link>
         </nav>
 
         {/* CTA + мобильная кнопка */}
@@ -124,79 +110,50 @@ export default function Header() {
       {mobileOpen && (
         <div className="lg:hidden border-t border-[var(--border-subtle)] bg-[var(--graphite)]">
           <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
-            {/* Услуги с раскрытием */}
-            <div>
-              <button
-                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                className="w-full text-left px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors flex items-center justify-between"
-              >
+            {/* Услуги */}
+            <details className="group">
+              <summary className="w-full text-left px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors flex items-center justify-between cursor-pointer list-none">
                 Услуги
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    mobileServicesOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              {mobileServicesOpen && (
-                <div className="pl-4 mt-1 flex flex-col gap-1">
-                  <Link
-                    href="/audit"
-                    onClick={() => setMobileOpen(false)}
-                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-                  >
-                    Аудит сервисной системы
-                  </Link>
-                  <Link
-                    href="/ekspress-diagnostika"
-                    onClick={() => setMobileOpen(false)}
-                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-                  >
-                    Экспресс-диагностика
-                  </Link>
-                  <Link
-                    href="/services"
-                    onClick={() => setMobileOpen(false)}
-                    className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-                  >
-                    Все услуги
-                  </Link>
-                </div>
-              )}
-            </div>
+                <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="pl-4 mt-1 flex flex-col gap-1">
+                <Link
+                  href="/audit"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                >
+                  Аудит сервисной системы
+                </Link>
+                <Link
+                  href="/ekspress-diagnostika"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                >
+                  Экспресс-диагностика
+                </Link>
+                <Link
+                  href="/services"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
+                >
+                  Все услуги
+                </Link>
+              </div>
+            </details>
 
-            <Link
-              href="/methodology"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-            >
+            <Link href="/methodology" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Для кого
             </Link>
-            <Link
-              href="/cases"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-            >
+            <Link href="/cases" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Практика
             </Link>
-            <Link
-              href="/about"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-            >
+            <Link href="/about" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Об эксперте
             </Link>
-            <Link
-              href="/articles"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-            >
+            <Link href="/articles" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Публикации
             </Link>
-            <Link
-              href="/contacts"
-              onClick={() => setMobileOpen(false)}
-              className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
-            >
+            <Link href="/contacts" onClick={() => setMobileOpen(false)} className="px-3 py-3 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors">
               Контакты
             </Link>
             <Link
