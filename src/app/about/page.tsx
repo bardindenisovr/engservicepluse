@@ -4,16 +4,16 @@ import AuthorIdentity from "@/components/AuthorIdentity";
 import ExpertContacts from "@/components/ExpertContacts";
 
 export const metadata: Metadata = {
-  title: "Об эксперте",
+  title: "Роман Бардин-Денисов — эксперт-практик по архитектуре инженерного сервиса",
   description:
-    "Роман Бардин-Денисов — руководитель и архитектор сервисных систем, член Ассоциации ЕАМ (Ассоциации эффективного управления производственными активами). ORCID: 0009-0003-8458-8787.",
+    "Помогаю производителям и поставщикам оборудования организовать сервис и ТОиР: аудит, проектирование процессов, SLA и KPI, ЗИП, сопровождение внедрения. Член Ассоциации ЕАМ. ORCID: 0009-0003-8458-8787.",
   alternates: {
     canonical: "https://serviceinplus.ru/about",
   },
   openGraph: {
-    title: "Об эксперте | Сервис в плюс",
+    title: "Роман Бардин-Денисов — эксперт-практик | Сервис в плюс",
     description:
-      "Роман Бардин-Денисов — руководитель и архитектор сервисных систем.",
+      "Архитектура инженерного сервиса: аудит, процессы, SLA, гарантия, ЗИП, сервисные сети.",
     url: "https://serviceinplus.ru/about",
     siteName: "Сервис в плюс",
     locale: "ru_RU",
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Об эксперте | Сервис в плюс",
+    title: "Роман Бардин-Денисов — эксперт-практик | Сервис в плюс",
     description:
-      "Роман Бардин-Денисов — руководитель и архитектор сервисных систем.",
+      "Архитектура инженерного сервиса: аудит, процессы, SLA, гарантия, ЗИП, сервисные сети.",
   },
 };
 
@@ -33,7 +33,11 @@ export default function AboutPage() {
       <About />
       <section aria-label="Связаться с экспертом" className="max-w-7xl mx-auto px-6 py-8">
         <div className="p-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40">
-          <h2 className="text-lg font-semibold text-white mb-4">Обсудить задачу</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Как начать</h2>
+          <p className="text-sm text-gray-400 mb-4 max-w-2xl leading-relaxed">
+            На вводной встрече за 30 минут уточним проблему, доступные данные и возможный первый шаг.
+            Если задача вне моего профиля или проект пока не готов к запуску — обозначу это до начала работ.
+          </p>
           <ExpertContacts />
         </div>
       </section>
