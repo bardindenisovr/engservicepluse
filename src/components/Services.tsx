@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Target, Wrench, Users, Package, BarChart3, FileSearch, Shield, Network, Cog, GraduationCap } from "lucide-react";
 
@@ -98,73 +97,55 @@ const services = [
 ];
 
 export default function Services() {
-  const [activeService, setActiveService] = useState<string | null>(null);
-
   return (
     <section id="services" className="relative z-10 border-t border-[var(--border-subtle)]">
       <div className="max-w-7xl mx-auto px-6 py-20">
-        {/* Заголовок */}
-        <div className="mb-12">
+        {/* Заголовок — стратегия, раздел 3 «Все услуги» */}
+        <div className="mb-12 pt-8">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--graphite)]/50 backdrop-blur-sm mb-6">
             <div className="w-2 h-2 rounded-full bg-[var(--electric-blue)] animate-pulse" />
             <span className="text-xs text-[var(--electric-blue)] tracking-wide uppercase">
-              Форматы работы
+              Все услуги
             </span>
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl">
-            Чем могу{" "}
-            <span className="text-[var(--electric-blue)]">помочь</span>
-          </h2>
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
+            Услуги по аудиту, организации и развитию{" "}
+            <span className="text-[var(--electric-blue)]">инженерного сервиса</span>
+          </h1>
 
-          <p className="text-lg text-gray-400 max-w-2xl mt-4 leading-relaxed">
-            Подключаюсь как руководитель, независимый эксперт или партнёр по
-            проекту — в зависимости от масштаба и срочности задачи.
+          <p className="text-lg text-gray-400 max-w-3xl mt-4 leading-relaxed">
+            Выберите формат по задаче: разобраться в проблеме, спроектировать
+            процесс или внедрить согласованное решение. Аудит не является
+            обязательным условием всех работ — если исходные данные достаточны,
+            можно начать с конкретного направления.
           </p>
         </div>
 
-        {/* Сетка услуг */}
+        {/* Сетка услуг: задача → результат → переход (п. 23 — детали видны без наведения) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {services.map((service) => {
             const Icon = service.icon;
-            const isActive = activeService === service.id;
             return (
               <div
                 key={service.id}
-                onMouseEnter={() => setActiveService(service.id)}
-                onMouseLeave={() => setActiveService(null)}
-                className={`p-6 rounded-xl border transition-all duration-300 ${
-                  isActive
-                    ? "border-[var(--electric-blue)]/40 bg-[var(--electric-blue)]/5"
-                    : "border-[var(--border-subtle)] bg-[var(--graphite)]/40 hover:border-[var(--electric-blue)]/30"
-                }`}
+                className="p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40 hover:border-[var(--electric-blue)]/30 transition-all duration-300"
               >
                 <div className="flex items-start gap-4 mb-4">
-                  <div
-                    className={`w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
-                      isActive
-                        ? "bg-[var(--electric-blue)] text-white"
-                        : "bg-[var(--graphite-light)] text-[var(--electric-blue)]"
-                    }`}
-                  >
+                  <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 bg-[var(--graphite-light)] text-[var(--electric-blue)]">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-lg font-semibold text-white leading-tight mb-1">
+                    <h2 className="text-lg font-semibold text-white leading-tight mb-1">
                       {service.title}
-                    </h3>
+                    </h2>
                     <p className="text-sm text-gray-500 leading-relaxed">
                       {service.problem}
                     </p>
                   </div>
                 </div>
 
-                {/* Раскрывающееся описание */}
-                <div
-                  className={`space-y-3 text-sm transition-all duration-300 overflow-hidden ${
-                    isActive ? "opacity-100 max-h-60 mt-4" : "opacity-0 max-h-0"
-                  }`}
-                >
+                <div className="space-y-3 text-sm mt-4">
                   <div className="pl-15">
                     <p className="text-gray-400 leading-relaxed">
                       <span className="text-[var(--electric-blue)] font-medium">Что делаем: </span>
@@ -193,15 +174,28 @@ export default function Services() {
                     </Link>
                   </div>
                 </div>
-
-                {!isActive && (
-                  <p className="text-xs text-gray-600 mt-3 pl-15">
-                    Наведите, чтобы увидеть детали
-                  </p>
-                )}
               </div>
             );
           })}
+        </div>
+
+        {/* Условия — стратегия, раздел 3 */}
+        <div className="mt-12 p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/40">
+          <p className="text-sm text-gray-400 leading-relaxed max-w-4xl">
+            Сроки указаны для согласованного объёма при наличии данных и доступа
+            к участникам. Стоимость зависит от числа площадок, процессов, глубины
+            анализа и состава результата. Точная цена, налоги, выезды и расходы
+            фиксируются в предложении до начала работ. Если следующий этап
+            использует уже собранные материалы, повторная работа в расчёт не
+            включается.
+          </p>
+          <Link
+            href="/contacts"
+            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white text-sm font-medium transition-all min-h-[44px]"
+          >
+            Подобрать формат под задачу
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>
