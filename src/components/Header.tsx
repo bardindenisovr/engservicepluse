@@ -10,7 +10,7 @@ const navItems = [
     label: "Услуги",
     children: [
       { href: "/audit", label: "Аудит сервисной системы" },
-      { href: "/services", label: "Экспресс-диагностика" },
+      { href: "/ekspress-diagnostika", label: "Экспресс-диагностика" },
     ],
   },
   { href: "/methodology", label: "Для кого" },
@@ -38,11 +38,11 @@ export default function Header() {
             />
           </div>
           <div className="hidden sm:block leading-tight">
-            <div className="text-sm font-semibold text-white group-hover:text-[var(--electric-blue)] transition-colors">
+            <div className="text-sm font-semibold text-white group-hover:text-[var(--electric-blue)] transition-colors whitespace-nowrap">
               Сервис в плюс
             </div>
-            <div className="text-[10px] text-gray-400 uppercase tracking-wider">
-              Архитектура инженерного сервиса
+            <div className="text-[10px] text-gray-400 uppercase tracking-wider whitespace-nowrap">
+              Архитектура инженерного сервиса | ТОиР
             </div>
           </div>
         </Link>
@@ -64,7 +64,7 @@ export default function Header() {
                   <div className="absolute top-full left-0 mt-1 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)] shadow-xl py-2">
                     {item.children.map((child) => (
                       <Link
-                        key={child.label}
+                        key={child.href}
                         href={child.href}
                         onClick={() => setServicesOpen(false)}
                         className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[var(--graphite-light)] transition-colors"
@@ -147,7 +147,7 @@ export default function Header() {
                     Аудит сервисной системы
                   </Link>
                   <Link
-                    href="/services"
+                    href="/ekspress-diagnostika"
                     onClick={() => setMobileOpen(false)}
                     className="px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-[var(--graphite-light)] rounded-md transition-colors"
                   >
