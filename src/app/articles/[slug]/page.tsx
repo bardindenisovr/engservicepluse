@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import AuthorIdentity, { AUTHOR_ORCID } from "@/components/AuthorIdentity";
+import ArticleToolCta from "@/components/ArticleToolCta";
 
 export const dynamic = "force-dynamic";
 interface Props { params: Promise<{ slug: string }> }
@@ -64,6 +65,12 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       )}
       <div className="text-gray-300 leading-relaxed space-y-4 [&_h3]:text-white [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:leading-relaxed [&_a]:text-[var(--electric-blue)]" dangerouslySetInnerHTML={{ __html: article.body }} />
+      <ArticleToolCta
+        title={article.title}
+        excerpt={article.excerpt}
+        tags={article.tags.map((t) => t.name)}
+        category={article.category?.name}
+      />
       <AuthorIdentity />
       <div className="mt-10 p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-[var(--teal-accent)]/5">
         <p className="text-sm text-gray-300 mb-3">Если похожая задача существует в вашей компании, её можно разобрать на консультации или в рамках аудита.</p>
