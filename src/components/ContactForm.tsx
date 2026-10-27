@@ -22,6 +22,7 @@ export default function ContactForm() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    company: "",
     phone: "",
     telegram: "",
     message: "",
@@ -40,6 +41,11 @@ export default function ContactForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!form.email.trim() && !form.phone.trim() && !form.telegram.trim()) {
+      setError("Укажите хотя бы один способ связи: email, телефон или Telegram");
+      return;
+    }
 
     if (!consent) {
       setError("Необходимо согласие на обработку персональных данных");
@@ -113,40 +119,46 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-gray-500 mb-2">
-          Email <span className="text-[var(--warm-accent)]">*</span>
+          Контакт для связи{" "}
+          <span className="text-[var(--warm-accent)]">*</span>
+          <span className="text-gray-600 font-normal"> — email, телефон или Telegram (хотя бы один)</span>
         </label>
-        <input
-          type="email"
-          required
-          value={form.email}
-          onChange={(e) => update("email", e.target.value)}
-          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-          placeholder="you@company.ru"
-        />
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">Телефон</label>
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => update("email", e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
+            placeholder="Email"
+          />
           <input
             type="tel"
             value={form.phone}
             onChange={(e) => update("phone", e.target.value)}
             className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="+7 ..."
+            placeholder="Телефон"
           />
         </div>
+        <input
+          type="text"
+          value={form.telegram}
+          onChange={(e) => update("telegram", e.target.value)}
+          className="w-full mt-4 px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
+          placeholder="Telegram @username"
+        />
+      </div>
 
-        <div>
-          <label className="block text-xs text-gray-500 mb-2">Telegram</label>
-          <input
-            type="text"
-            value={form.telegram}
-            onChange={(e) => update("telegram", e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
-            placeholder="@username"
-          />
-        </div>
+      <div>
+        <label className="block text-xs text-gray-500 mb-2">
+          Компания и должность
+        </label>
+        <input
+          type="text"
+          value={form.company}
+          onChange={(e) => update("company", e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none"
+          placeholder="ООО «ПромТех», руководитель сервиса"
+        />
       </div>
 
       <div>
@@ -169,15 +181,16 @@ export default function ContactForm() {
 
       <div>
         <label className="block text-xs text-gray-500 mb-2">
-          Описание задачи <span className="text-[var(--warm-accent)]">*</span>
+          Краткое описание задачи{" "}
+          <span className="text-[var(--warm-accent)]">*</span>
         </label>
         <textarea
           required
-          rows={5}
+          rows={4}
           value={form.message}
           onChange={(e) => update("message", e.target.value)}
           className="w-full px-4 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--background)] text-white focus:border-[var(--electric-blue)]/50 outline-none resize-vertical text-sm"
-          placeholder="Тип оборудования, география, количество обращений, гарантийная нагрузка, текущая ситуация или цель изменений"
+          placeholder="Что происходит, на что это влияет, что хотите изменить"
         />
       </div>
 
@@ -242,15 +255,10 @@ export default function ContactForm() {
         ) : (
           <>
             <Send className="w-4 h-4" />
-            Отправить запрос
+            Обсудить задачу
           </>
         )}
       </button>
-
-      <p className="text-[11px] text-gray-600 text-center leading-relaxed">
-        Первый разговор — без обязательств. Определим контекст, масштаб задачи и
-        возможный формат работы.
-      </p>
     </form>
   );
 }
