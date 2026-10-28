@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./five-why.module.css";
+import DiscussTaskForm from "@/components/tools/DiscussTaskForm";
 
 type Action = { text: string; owner: string; due: string; done: boolean };
 type Analysis = { problem: string; whys: string[]; evidence: string[]; root: string; actions: Action[] };
@@ -17,6 +18,7 @@ export default function FiveWhy() {
   const [data, setData] = useState<Analysis>(blank);
   const [ready, setReady] = useState(false);
   const [message, setMessage] = useState("");
+  const [after, setAfter] = useState<"" | "saved" | "exported">("");
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => {
     try { const raw = localStorage.getItem(KEY); if (raw) { const parsed: unknown = JSON.parse(raw); if (valid(parsed)) setData(parsed); else setMessage("Сохранённый черновик имеет неподдерживаемый формат."); } }
@@ -31,6 +33,11 @@ export default function FiveWhy() {
   function download() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
     const a = document.createElement("a"); a.href = url; a.download = "5why-analysis.json"; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setAfter("exported");
+  }
+  function saveNow() {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); setMessage("Анализ сохранён в этом браузере."); setAfter("saved"); }
+    catch { setMessage("Сохранение недоступно. Скачайте JSON, чтобы не потерять данные."); }
   }
   async function load(file?: File) {
     if (!file) return;
@@ -49,7 +56,7 @@ export default function FiveWhy() {
     <p>Двигайтесь от наблюдаемой проблемы к проверяемым причинам. Пять уровней — ориентир, а не обязательное условие. Не подменяйте факты предположениями.</p>
     <p className={styles.notice}>Первая версия для сайта: данные сохраняются только в этом браузере. Серверного сохранения и синхронизации пока нет. Не вводите конфиденциальные сведения. Поля исключены из записи Вебвизора.</p>
     <div className={styles.toolbar}>
-      <button onClick={download}>Скачать JSON</button><button onClick={() => input.current?.click()}>Импорт JSON</button><button onClick={() => window.print()}>Печать / PDF</button>
+      <button onClick={saveNow}>Сохранить</button><button onClick={download}>Скачать JSON</button><button onClick={() => input.current?.click()}>Импорт JSON</button><button onClick={() => { window.print(); setAfter("exported"); }}>Печать / PDF</button>
       <button onClick={() => { if (window.confirm("Очистить текущий анализ? Сначала скачайте резервную копию.")) { setData(blank()); setMessage(""); } }}>Новый анализ</button>
       <input ref={input} type="file" accept=".json,application/json" hidden onChange={e => { void load(e.target.files?.[0]); e.target.value = ""; }} />
     </div>
@@ -81,6 +88,6 @@ export default function FiveWhy() {
     <button disabled={data.actions.length >= 100} onClick={() => setData(d => ({ ...d, actions: [...d.actions, { text: "", owner: "", due: "", done: false }] }))}>Добавить действие</button>
     </fieldset></div>
     <aside className={styles.cta}><h2>Продолжить разбор в отчёте 8D</h2><p>Цепочка причин, корневая причина и план действий подставятся в отчёт 8D автоматически — вводить заново не нужно.</p><Link href="/tools/8d.html?from=5why">Перенести в 8D →</Link></aside>
-    <aside className={styles.cta}><h2>Нужна помощь с разбором?</h2><p>Перейдите на страницу контактов, чтобы обсудить задачу. Содержимое анализа автоматически не передаётся.</p><Link href="/contacts">Обсудить задачу →</Link></aside>
+    {after && <aside className={styles.cta}><h2>{after === "saved" ? "Анализ сохранён. Что проверить дальше?" : "Файл готов. Нужна помощь с проверкой выводов?"}</h2><p>Опишите ситуацию — обсудим, какие причины проверить первыми и какие действия запустить. Содержимое анализа автоматически не передаётся.</p><DiscussTaskForm sourceTool="5why" sourcePage="/tools/5why" /></aside>}
   </section>;
 }

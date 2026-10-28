@@ -82,6 +82,18 @@ export default function ServicePageLayout({ service }: { service: ServicePage })
         </section>
       )}
 
+      {/* CTA раздела «Инструменты» */}
+      <section className="mt-10 p-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--graphite)]/30">
+        <h2 className="text-lg font-semibold mb-2">Начните с бесплатного самостоятельного разбора</h2>
+        <p className="text-sm text-gray-400 mb-4">«5 почему», диаграмма Исикавы, 8D и А3 — без регистрации.</p>
+        <Link
+          href="/tools"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border-subtle)] text-sm text-gray-300 hover:text-white hover:border-[var(--electric-blue)]/50 transition-colors min-h-[44px]"
+        >
+          Выбрать инструмент
+        </Link>
+      </section>
+
       {/* Повторный CTA */}
       <section className="mt-10 text-center">
         <Link
