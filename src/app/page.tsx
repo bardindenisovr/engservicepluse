@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MessageSquare, FileSearch, ChevronRight } from "lucide-react";
 import ServiceFlow from "@/components/ServiceFlow";
 import Diagnostics from "@/components/Diagnostics";
+import ToolsTeaser from "@/components/ToolsTeaser";
 import AuditSection from "@/components/AuditSection";
 import Services from "@/components/Services";
 import SystemModel from "@/components/SystemModel";
@@ -225,6 +226,9 @@ export default function Home() {
 
       {/* === ТИПОВЫЕ ПРОБЛЕМЫ (существующий блок, не изменён) === */}
       <Diagnostics />
+
+      {/* === БЕСПЛАТНЫЕ ИНСТРУМЕНТЫ → /tools (раздел 8 документа) === */}
+      <ToolsTeaser />
 
       {/* === 2.4–2.5. УСЛУГИ: АУДИТ / ЭКСПРЕСС-ДИАГНОСТИКА (лиды) === */}
       <section className="relative z-10 border-t border-[var(--border-subtle)] bg-[var(--graphite)]/30">
