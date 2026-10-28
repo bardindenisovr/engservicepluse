@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import DiscussTaskForm from "@/components/tools/DiscussTaskForm";
 
 export const metadata: Metadata = {
   title: "Диаграмма Исикавы онлайн для анализа причин",
@@ -16,6 +17,17 @@ const STEPS = [
   "Для каждой выбранной причины указываете, чем её подтвердить.",
   "Переносите выбранные причины в «5 почему», 8D или А3 — без повторного ввода.",
 ];
+
+const formButton: React.CSSProperties = {
+  display: "inline-block",
+  background: "#38bdf8",
+  color: "#0c0f16",
+  padding: "14px 28px",
+  borderRadius: 8,
+  fontWeight: 600,
+  border: "none",
+  cursor: "pointer",
+};
 
 export default function IshikawaPage() {
   return (
@@ -71,8 +83,8 @@ export default function IshikawaPage() {
 
       <div className="p-6 rounded-xl border border-[var(--electric-blue)]/20 bg-[var(--electric-blue)]/5 mb-10">
         <p className="text-sm text-gray-300 mb-4">
-          Рабочая версия инструмента готовится. Пока вы можете построить диаграмму в свободной
-          форме или начать с цепочки причин в «5 почему».
+          Рабочая версия инструмента готовится. Пока вы можете начать с цепочки причин в
+          «5 почему» или описать задачу в форме ниже.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -82,13 +94,13 @@ export default function IshikawaPage() {
             Начать с «5 почему»
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <Link
-            href="/contacts"
+          <a
+            href="#discuss"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--electric-blue)] hover:bg-[var(--electric-blue)]/90 text-white text-sm font-medium transition-all min-h-[44px]"
           >
-            Построить диаграмму
+            Обсудить задачу
             <ArrowRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -104,19 +116,22 @@ export default function IshikawaPage() {
         </details>
       </div>
 
-      <div className="p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-[var(--teal-accent)]/5">
+      <div
+        id="discuss"
+        className="scroll-mt-24 p-6 rounded-xl border border-[var(--teal-accent)]/20 bg-[var(--teal-accent)]/5"
+      >
         <h2 className="text-lg font-semibold text-white mb-2">Причин много, а времени на проверку мало?</h2>
         <p className="text-sm text-gray-300 mb-4">
           Обсудите задачу и определите, какие версии проверять первыми.
         </p>
-        <Link
-          href="/contacts"
-          className="inline-flex items-center gap-2 text-sm text-[var(--teal-accent)] hover:text-white transition-colors font-medium"
-        >
-          Обсудить задачу
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+        <DiscussTaskForm sourceTool="ishikawa" sourcePage="/tools/ishikawa" buttonStyle={formButton} />
       </div>
+
+      <p className="mt-8">
+        <Link href="/tools" className="text-sm text-[var(--teal-accent)] hover:text-white transition-colors">
+          ← Все инструменты
+        </Link>
+      </p>
     </div>
   );
 }
