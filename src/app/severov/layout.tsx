@@ -14,52 +14,18 @@ export const metadata: Metadata = {
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
-    {
-      '@type': 'Person',
-      '@id': `${url}#person`,
-      name: 'Игорь Северов',
-      url,
-      sameAs: ['https://tenchat.ru/1858784'],
-      description: 'Эксперт по производственным системам с 17-летним опытом в производстве.',
-      knowsAbout: [
-        'Бережливое производство',
-        'Аудит производственных процессов',
-        'Запуск производства',
-        '5S',
-        'SMED',
-        'Производственное планирование',
-        'ISO 9001',
-        'Обучение линейных руководителей',
-      ],
-    },
-    {
-      '@type': 'WebPage',
-      '@id': `${url}#webpage`,
-      url,
-      name: 'Игорь Северов — развитие производства',
-      inLanguage: 'ru-RU',
-      mainEntity: { '@id': `${url}#person` },
-      breadcrumb: { '@id': `${url}#breadcrumbs` },
-    },
-    {
-      '@type': 'BreadcrumbList',
-      '@id': `${url}#breadcrumbs`,
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Сервис в плюсе', item: 'https://serviceinplus.ru/' },
-        { '@type': 'ListItem', position: 2, name: 'Игорь Северов', item: url },
-      ],
-    },
+    { '@type': 'Person', '@id': `${url}#person`, name: 'Игорь Северов', url, sameAs: ['https://tenchat.ru/1858784'], description: 'Эксперт по производственным системам с 17-летним опытом в производстве.', knowsAbout: ['Бережливое производство', 'Аудит производственных процессов', 'Запуск производства', '5S', 'SMED', 'Производственное планирование', 'ISO 9001', 'Обучение линейных руководителей'] },
+    { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: 'Игорь Северов — развитие производства', inLanguage: 'ru-RU', mainEntity: { '@id': `${url}#person` }, breadcrumb: { '@id': `${url}#breadcrumbs` } },
+    { '@type': 'BreadcrumbList', '@id': `${url}#breadcrumbs`, itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Сервис в плюсе', item: 'https://serviceinplus.ru/' }, { '@type': 'ListItem', position: 2, name: 'Игорь Северов', item: url }] },
   ],
 };
 
 export default function SeverovLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
-      />
-      {children}
-    </>
-  );
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }} />
+    <nav aria-label="Хлебные крошки" style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', fontSize: 14 }}>
+      <a href="/">Главная</a><span aria-hidden="true"> / </span><span aria-current="page">Игорь Северов</span>
+    </nav>
+    {children}
+  </>;
 }
