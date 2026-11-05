@@ -57,6 +57,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+      <script type="text/javascript" src="https://api.uxrocket.ru/js/uxrocket.js" authkey="ORSUYDQF0U" fetchpriority="high"></script>
         {/* Яндекс.Метрика — оригинальный код от Яндекса */}
         <Script
           id="yandex-metrica"
