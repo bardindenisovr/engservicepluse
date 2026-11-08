@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+
+const nextConfig = {
   output: 'standalone',
   serverExternalPackages: ["@prisma/client", ".prisma/client", "@prisma/adapter-pg", "pg"],
   async redirects() {

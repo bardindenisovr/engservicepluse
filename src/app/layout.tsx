@@ -57,7 +57,11 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-      <script type="text/javascript" src="https://api.uxrocket.ru/js/uxrocket.js" authkey="ORSUYDQF0U" fetchpriority="high"></script>
+        <script
+          type="text/javascript"
+         src="https://api.uxrocket.ru/js/uxrocket.js"
+         {...({ authkey: 'ORSUYDQF0U', fetchPriority: 'high' } as Record<string, string>)}
+        />
         {/* Яндекс.Метрика — оригинальный код от Яндекса */}
         <Script
           id="yandex-metrica"
@@ -86,6 +90,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="min-h-screen flex flex-col">
+      <meta name="msvalidate.01" content="6107BF10E64D12762E7D3DA783A8EAA4" />
         <PersonSchema />
         <Header />
         <main className="flex-1 pt-16">{children}</main>
