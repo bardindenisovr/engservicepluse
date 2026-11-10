@@ -61,6 +61,7 @@ model Lead {
   topic             String?
   source            String?
   helpFormat        String?
+  preferredContact  String?
   sourcePage        String?
   sourceTool        String?
   utmSource         String?
