@@ -310,7 +310,7 @@ export default function LeadsManager({ leads }: { leads: Lead[] }) {
                       onChange={(e) => handleStatusChange(lead.id, e.target.value)}
                       className={`px-2 py-1 rounded-md border bg-[var(--background)] text-white text-xs disabled:opacity-50 ${
                         isError ? "border-red-500/60" : "border-[var(--border-subtle)]"
-                      } focus:border-[var(--electric-blue)] focus:outline-none transition-colors`
+                      } focus:border-[var(--electric-blue)] focus:outline-none transition-colors`}
                       title="Изменить статус заявки"
                     >
                       {STATUS_OPTIONS.map((o) => (
@@ -323,7 +323,7 @@ export default function LeadsManager({ leads }: { leads: Lead[] }) {
                       <span className="text-gray-600">…</span>
                     )}
                     {isError && !isPending && (
-                      <span className="text-red-400">не сохранено
+                      <span className="text-red-400">не сохранено</span>
                     )}
                   </label>
                 </div>
