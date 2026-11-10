@@ -12,6 +12,7 @@ async function sendTelegramNotification(lead: {
   topic?: string | null;
   source?: string | null;
   helpFormat?: string | null;
+  preferredContact?: string | null;
   sourcePage?: string | null;
   sourceTool?: string | null;
   newsletterConsent?: boolean;
@@ -39,6 +40,7 @@ async function sendTelegramNotification(lead: {
   if (lead.telegram) lines.push(`*Telegram:* ${lead.telegram}`);
   if (lead.topic) lines.push(`*Тема:* ${lead.topic}`);
   if (lead.helpFormat) lines.push(`*Формат помощи:* ${lead.helpFormat}`);
+  if (lead.preferredContact) lines.push(`*Удобный способ связи:* ${lead.preferredContact}`);
   if (lead.sourceTool) lines.push(`*Инструмент:* ${lead.sourceTool}`);
   if (lead.sourcePage) lines.push(`*Страница:* ${lead.sourcePage}`);
   if (lead.source) lines.push(`*Источник:* ${lead.source}`);
@@ -90,7 +92,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // П. 5.1: обязателен хотя бы один контакт — e-mail или телефон
     if (!email && !phone) {
       return NextResponse.json(
         { error: "Укажите контакт для связи: e-mail или телефон" },
@@ -106,7 +107,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // П. 5.1: без отметки согласия на обработку данных форма не отправляется
     const consentPersonal =
       body.consentPersonal === true || body.consent === true;
     if (!consentPersonal) {
@@ -126,9 +126,10 @@ export async function POST(request: Request) {
         telegram: body.telegram?.trim() || null,
         message,
         topic: body.topic?.trim() || null,
-        source: body.source || "contact-form", 
+        source: body.source || "contact-form",
         sourcePage: body.sourcePage?.trim() || null,
         sourceTool: body.sourceTool?.trim() || null,
+        preferredContact: body.preferredContact?.trim() || null,
         utmSource: body.utmSource?.trim() || null,
         utmMedium: body.utmMedium?.trim() || null,
         utmCampaign: body.utmCampaign?.trim() || null,
@@ -142,7 +143,9 @@ export async function POST(request: Request) {
 
     console.log("Новая заявка:", lead.id, lead.name);
 
-    await sendTelegramNotification(lead);
+    sendTelegramNotification(lead).catch((error) => {
+      console.error("Асинхронная отправка в Telegram не удалась:", error);
+    });
 
     return NextResponse.json({ ok: true, id: lead.id });
   } catch (error) {
