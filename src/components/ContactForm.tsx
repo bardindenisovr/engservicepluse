@@ -57,13 +57,20 @@ export default function ContactForm() {
     setSending(true);
 
     try {
+      // consent хранится вне объекта form, поэтому передаём его отдельно,
+      // иначе сервер вернёт 400 "Требуется согласие на обработку персональных данных".
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
           contact: contactValue,
+          consent,
+          consentPersonal: consent,
+          consentVersion: "2026-10-27",
           source: "contact-form",
+          sourcePage:
+            typeof window !== "undefined" ? window.location.pathname : null,
         }),
       });
 
