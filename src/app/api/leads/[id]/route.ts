@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 const ALLOWED_STATUSES = ["new", "accepted", "processed"] as const;
 type AllowedStatus = (typeof ALLOWED_STATUSES)[number];
 
@@ -12,22 +14,29 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 function isAllowedStatus(value: unknown): value is AllowedStatus {
-  return typeof value === "string" && (ALLOWED_STATUSES as readonly string[]).includes(value);
+  return (
+    typeof value === "string" &&
+    (ALLOWED_STATUSES as readonly string[]).includes(value)
+  );
 }
 
 // GET /api/leads/:id — получить заявку (для админки)
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  const id = Number(params.id);
-  if (!Number.isFinite(id)) {
-    return NextResponse.json({ error: "Некорректный id" }, { status: 400 });
+  const { id: idStr } = await params;
+  const id = Number(idStr);
+  if (!Number.isFinite(id) || id <= 0) {
+    return NextResponse.json(
+      { error: "Некорректный идентификатор заявки" },
+      { status: 400 }
+    );
   }
 
   const lead = await prisma.lead.findUnique({ where: { id } });
@@ -35,22 +44,31 @@ export async function GET(
     return NextResponse.json({ error: "Заявка не найдена" }, { status: 404 });
   }
 
-  return NextResponse.json({ lead });
+  return NextResponse.json({
+    ...lead,
+    statusLabel: STATUS_LABELS[lead.status] ?? lead.status,
+    createdAt: lead.createdAt.toISOString(),
+    updatedAt: lead.updatedAt.toISOString(),
+  });
 }
 
 // PATCH /api/leads/:id — сменить статус заявки
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authed = await isAuthenticated();
   if (!authed) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  const id = Number(params.id);
-  if (!Number.isFinite(id)) {
-    return NextResponse.json({ error: "Некорректный id" }, { status: 400 });
+  const { id: idStr } = await params;
+  const id = Number(idStr);
+  if (!Number.isFinite(id) || id <= 0) {
+    return NextResponse.json(
+      { error: "Некорректный идентификатор заявки" },
+      { status: 400 }
+    );
   }
 
   let body: Record<string, unknown> = {};
@@ -84,9 +102,23 @@ export async function PATCH(
     const updated = await prisma.lead.update({
       where: { id },
       data: { status: nextStatus },
+      select: { id: true, status: true, updatedAt: true },
     });
-    return NextResponse.json({ ok: true, lead: updated });
-  } catch (error) {
+
+    return NextResponse.json({
+      ok: true,
+      id: updated.id,
+      status: updated.status,
+      statusLabel: STATUS_LABELS[updated.status] ?? updated.status,
+      updatedAt: updated.updatedAt.toISOString(),
+    });
+  } catch (error: any) {
+    if (error?.code === "P2025") {
+      return NextResponse.json(
+        { error: "Заявка не найдена" },
+        { status: 404 }
+      );
+    }
     console.error("Ошибка обновления статуса:", error);
     return NextResponse.json(
       { error: "Не удалось обновить статус" },
