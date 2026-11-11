@@ -7,14 +7,20 @@ function getTransporter(): Transporter | null {
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;
 
-  if (!smtpUser || !smtpPass) {
-    console.warn("[mailer] Проверка окружения:", {
-      SMTP_USER: smtpUser ? "задана" : "НЕ ЗАДАНА",
-      SMTP_PASS: smtpPass ? "задана" : "НЕ ЗАДАНА",
+    if (!smtpUser || !smtpPass) {
+    const keys = Object.keys(process.env);
+    console.warn("[mailer] Диагностика окружения:", {
+      totalEnvKeys: keys.length,
+      // Ищем похожие имена, в том числе с пробелами или в другом регистре
+      smtpLikeKeys: keys
+        .filter((k) => /smtp|leads/i.test(k))
+        .map((k) => JSON.stringify(k)),
+      hasDatabaseUrl: Boolean(process.env.DATABASE_URL),
+      hasTelegramToken: Boolean(process.env.TELEGRAM_BOT_TOKEN),
+      nodeEnv: process.env.NODE_ENV,
     });
     return null;
   }
-
   if (!transporter) {
     const smtpHost = process.env.SMTP_HOST ?? "smtp.mail.ru";
     const smtpPort = Number(process.env.SMTP_PORT ?? 465);
