@@ -55,6 +55,9 @@ COPY --from=builder --chown=app:app /app/prisma ./prisma
 COPY --from=builder --chown=app:app /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=app:app /app/node_modules/@prisma ./node_modules/@prisma
 
+# Копируем файл(ы) окружения, если они были созданы платфомой на этапе сборки
+COPY --from=builder --chown=app:app /app/.env* ./
+
 USER app
 
 EXPOSE 3000
@@ -63,4 +66,4 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "if [ -f .env ]; then node --env-file=.env server.js; else node server.js; fi"]
