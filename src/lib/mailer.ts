@@ -38,7 +38,7 @@ function getTransporter(): Transporter | null {
 
   return transporter;
 }
-
+console.log("[mailer] Все ключи env:", Object.keys(process.env).sort());
 const PREFERRED_LABELS: Record<string, string> = {
   email: "Email",
   phone: "Телефон",
