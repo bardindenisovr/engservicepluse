@@ -1,28 +1,39 @@
 import nodemailer from "nodemailer";
 import type { Transporter, TransportOptions } from "nodemailer";
 
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
-const SMTP_HOST = process.env.SMTP_HOST ?? "smtp.yandex.ru";
-const SMTP_PORT = Number(process.env.SMTP_PORT ?? 465);
-const NOTIFY_TO = process.env.LEADS_NOTIFY_TO ?? "bardindenisovr@mail.ru";
-
 let transporter: Transporter | null = null;
 
 function getTransporter(): Transporter | null {
-  if (!SMTP_USER || !SMTP_PASS) return null;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (!smtpUser || !smtpPass) {
+    console.warn("[mailer] Проверка окружения:", {
+      SMTP_USER: smtpUser ? "задана" : "НЕ ЗАДАНА",
+      SMTP_PASS: smtpPass ? "задана" : "НЕ ЗАДАНА",
+    });
+    return null;
+  }
+
   if (!transporter) {
+    const smtpHost = process.env.SMTP_HOST ?? "smtp.mail.ru";
+    const smtpPort = Number(process.env.SMTP_PORT ?? 465);
+
     transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: SMTP_PORT,
-      secure: SMTP_PORT === 465,
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
     } as TransportOptions);
   }
+
   return transporter;
 }
 
-const PREFFERED_LABELS: Record<string, string> = {
+const PREFERRED_LABELS: Record<string, string> = {
   email: "Email",
   phone: "Телефон",
   telegram: "Telegram",
@@ -36,19 +47,22 @@ export interface LeadEmail {
   telegram: string | null;
   topic: string | null;
   preferredContact: string | null;
-  message: string | null;          // ← было string, стало string | null
+  message: string | null;
   createdAt: Date;
 }
 
 export async function sendLeadEmail(lead: LeadEmail) {
   const t = getTransporter();
+
   if (!t) {
-    console.warn("[mailer] SMTP_USER/SMTP_PASS не заданы — отправка email пропущена");
+    console.warn(
+      "[mailer] SMTP_USER/SMTP_PASS не заданы — отправка email пропущена"
+    );
     return { ok: false, reason: "no-smtp-config" };
   }
 
   const preferredLabel = lead.preferredContact
-    ? PREFFERED_LABELS[lead.preferredContact] ?? lead.preferredContact
+    ? PREFERRED_LABELS[lead.preferredContact] ?? lead.preferredContact
     : "—";
 
   const text = [
@@ -65,19 +79,21 @@ export async function sendLeadEmail(lead: LeadEmail) {
     lead.message || "—",
     "",
     `Получено: ${lead.createdAt.toLocaleString("ru-RU")}`,
-    `Открыть в админке: https://serviceinplus.ru/admin/leads`,
+    "Открыть в админке: https://serviceinplus.ru/admin/leads",
   ].join("\r\n");
 
   const subject = `Новая заявка №${lead.id} — ${lead.name || "без имени"}`;
 
   try {
     const info = await t.sendMail({
-      from: `"serviceinplus.ru" <${SMTP_USER}>`,
-      to: NOTIFY_TO,
+      from: `"serviceinplus.ru" <${process.env.SMTP_USER}>`,
+      to: process.env.LEADS_NOTIFY_TO ?? "bardindenisovr@mail.ru",
       subject,
       text,
       headers: { "X-Lead-Id": String(lead.id) },
     });
+
+    console.info("[mailer] Письмо принято SMTP-сервером:", info.messageId);
     return { ok: true, messageId: info.messageId };
   } catch (error) {
     console.error("[mailer] Ошибка отправки email:", error);
