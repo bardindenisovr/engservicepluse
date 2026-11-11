@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendLeadEmail } from "@/lib/mailer";
 
 async function sendTelegramNotification(lead: {
   name: string;
@@ -145,6 +146,10 @@ export async function POST(request: Request) {
 
     sendTelegramNotification(lead).catch((error) => {
       console.error("Асинхронная отправка в Telegram не удалась:", error);
+    });
+
+    sendLeadEmail(lead).catch((error) => {
+      console.error("Асинхронная отправка email не удалась:", error);
     });
 
     return NextResponse.json({ ok: true, id: lead.id });
