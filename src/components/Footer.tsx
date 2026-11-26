@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FooterDirections } from "@/components/ProductionIntegration";
 import { Send, ExternalLink, Mail } from "lucide-react";
 import ExpertContacts from "@/components/ExpertContacts";
 
@@ -6,129 +7,41 @@ const navItems = [
   { href: "/services", label: "Все услуги" },
   { href: "/audit", label: "Аудит" },
   { href: "/ekspress-diagnostika", label: "Экспресс-диагностика" },
-  { href: "/services", label: "Проектирование" },
-  { href: "/services", label: "Сопровождение" },
-  { href: "/methodology", label: "Для кого" },
+  { href: "/production", label: "Организация производства" },
+  { href: "/methodology", label: "Методология" },
   { href: "/cases", label: "Практика" },
-  { href: "/about", label: "Об эксперте" },
+  { href: "/experts", label: "Эксперты" },
   { href: "/articles", label: "Публикации" },
   { href: "/contacts", label: "Контакты" },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="relative z-10 border-t border-[var(--border-subtle)] bg-[var(--graphite)]/50 mt-20">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Основная сетка футера */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Бренд — стратегия, раздел 20 */}
+    <footer className="relative z-10 mt-20 border-t border-[var(--border-subtle)] bg-[var(--graphite)]/50"><FooterDirections />
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="mb-10 grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-[var(--graphite)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
-                <img
-                  src="/telegram-logo.png"
-                  alt="Сервис в плюс"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-white">Сервис в плюс</div>
-                <div className="text-[10px] text-gray-500 uppercase tracking-wider">
-                  Архитектура инженерного сервиса | ТОиР
-                </div>
-              </div>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-subtle)] bg-[var(--graphite)]"><img src="/telegram-logo.png" alt="Сервис в плюс" className="h-full w-full object-cover" /></div>
+              <div><div className="text-sm font-semibold text-white">Сервис в плюс</div><div className="text-[10px] uppercase tracking-wider text-gray-500">Инженерный сервис | ТОиР | Производство</div></div>
             </div>
-            <p className="text-sm text-gray-400 max-w-md leading-relaxed">
-              Архитектура и внедрение управляемого инженерного сервиса.
-              Роман Бардин-Денисов. Диагностика, проектирование процессов,
-              сопровождение внедрения для производителей, поставщиков
-              оборудования и предприятий.
-            </p>
+            <p className="max-w-md text-sm leading-relaxed text-gray-400">Диагностика и организация работы сервиса, ТОиР и производства. Профильные задачи ведут эксперты соответствующих направлений; состав работ и ответственность согласуются до начала проекта.</p>
           </div>
-
-          {/* Навигация — стратегия, раздел 20 */}
+          <div><h3 className="mb-4 text-xs uppercase tracking-widest text-gray-500">Разделы</h3><ul className="space-y-2">{navItems.map((item) => <li key={item.label}><Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-[var(--electric-blue)]">{item.label}</Link></li>)}</ul></div>
           <div>
-            <h3 className="text-xs uppercase tracking-widest text-gray-500 mb-4">
-              Разделы
-            </h3>
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-gray-400 hover:text-[var(--electric-blue)] transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Контакты */}
-          <div>
-            <h3 className="text-xs uppercase tracking-widest text-gray-500 mb-4">
-              Связь
-            </h3>
-            <ExpertContacts />
-            <ul className="space-y-3 mt-5">
-              <li>
-                <a
-                  href="https://t.me/engserviceplus"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[var(--electric-blue)] transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                  Telegram-канал
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://tenchat.ru/bardin-denisov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[var(--electric-blue)] transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  TenChat
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/contacts"
-                  className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-[var(--electric-blue)] transition-colors"
-                >
-                  <Mail className="w-4 h-4" />
-                  Обсудить задачу
-                </Link>
-              </li>
+            <h3 className="mb-4 text-xs uppercase tracking-widest text-gray-500">Связь</h3><ExpertContacts />
+            <ul className="mt-5 space-y-3">
+              <li><a href="https://t.me/engserviceplus" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-[var(--electric-blue)]"><Send className="h-4 w-4" />Telegram-канал</a></li>
+              <li><a href="https://tenchat.ru/bardin-denisov" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-[var(--electric-blue)]"><ExternalLink className="h-4 w-4" />TenChat</a></li>
+              <li><Link href="/contacts" className="inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-[var(--electric-blue)]"><Mail className="h-4 w-4" />Обсудить задачу</Link></li>
             </ul>
           </div>
         </div>
-
-        {/* Финальная фраза */}
-        <div className="py-6 border-t border-[var(--border-subtle)]">
-          <p className="text-center text-sm text-[var(--teal-accent)] italic">
-            «Сервис становится преимуществом, когда им можно управлять»
-          </p>
-        </div>
-
-        {/* Нижняя строка */}
-        <div className="pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500">
-            © {currentYear} Сервис в плюс. Все права защищены.
-          </p>
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
-            <Link href="/privacy" className="hover:text-gray-300 transition-colors">
-              Политика обработки персональных данных
-            </Link>
-            <Link href="/consent" className="hover:text-gray-300 transition-colors">
-              Согласие на обработку данных
-            </Link>
-          </div>
+        <div className="border-t border-[var(--border-subtle)] py-6"><p className="text-center text-sm italic text-[var(--teal-accent)]">«Сервис становится преимуществом, когда им можно управлять»</p></div>
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--border-subtle)] pt-6 md:flex-row">
+          <p className="text-xs text-gray-500">© {currentYear} Сервис в плюс. Все права защищены.</p>
+          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500"><Link href="/privacy" className="transition-colors hover:text-gray-300">Политика обработки персональных данных</Link><Link href="/consent" className="transition-colors hover:text-gray-300">Согласие на обработку данных</Link></div>
         </div>
       </div>
     </footer>
