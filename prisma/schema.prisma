@@ -68,6 +68,14 @@ model Lead {
   utmMedium         String?
   utmCampaign       String?
   consentVersion    String?
+  consentAccepted   Boolean  @default(false)
+  direction         String?  @default("unsure")
+  offerCode         String?
+  productionSize    String?
+  formId            String?
+  expertHint        String?
+  assignedTo        String?
+  submissionKey     String?  @unique
   newsletterConsent Boolean  @default(false)
   analysisAttached  Boolean  @default(false)
   analysisLink      String?
@@ -77,6 +85,9 @@ model Lead {
 
   @@index([status])
   @@index([createdAt])
+  @@index([direction])
+  @@index([assignedTo])
+  @@index([submissionKey])
 }
 
 model Setting {

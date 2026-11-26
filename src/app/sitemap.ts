@@ -12,9 +12,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${BASE_URL}/services`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/production`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/experts`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/audit`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/ekspress-diagnostika`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/methodology`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/methodology", changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/cases`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/severov`, changeFrequency: "monthly", priority: 0.8 },
