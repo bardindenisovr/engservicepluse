@@ -1,17 +1,8 @@
+import type { Metadata } from "next";
 import Services from "@/components/Services";
-import ForEmployers from "@/components/ForEmployers";
+import { DirectionChoice, ProductionOffers } from "@/components/ProductionIntegration";
 
-export const metadata = {
-  title: "Услуги по организации сервиса и ТОиР — Сервис в плюс",
-  description:
-    "Услуги по аудиту, организации и развитию инженерного сервиса: экспресс-диагностика, аудит сервисной системы, проектирование, SLA и KPI, гарантия и рекламации, партнёрская сеть, ЗИП, экономика сервиса, организация ТОиР, сопровождение внедрения.",
-};
-
+export const metadata: Metadata = { title: "Услуги сервиса и организации производства | Сервис в Плюс", description: "Услуги по инженерному сервису, ТОиР и организации производства: выберите направление или опишите совместную задачу.", alternates: { canonical: "/services" } };
 export default function ServicesPage() {
-  return (
-    <div className="relative z-10">
-      <Services />
-      <ForEmployers />
-    </div>
-  );
+  return <main className="pt-20"><DirectionChoice /><section id="service" className="scroll-mt-24"><Services /></section><section className="mx-auto max-w-7xl px-6 py-16"><p className="mb-3 text-xs uppercase tracking-[0.2em] text-[var(--teal-accent)]">Игорь Северов · эксперт-партнёр</p><h2 className="mb-8 text-3xl font-bold text-white">Организация производства</h2><ProductionOffers /></section></main>;
 }
